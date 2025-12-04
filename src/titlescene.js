@@ -24,13 +24,4 @@ export default class titlescene extends Phaser.Scene {
         this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene1"));
     }
 
-    update() {
-        
-    //     if (
-    //         Phaser.Input.Keyboard.JustDown(this.keySpace) ||
-    //         Phaser.Input.Keyboard.JustDown(this.keyEnter)
-    //     ) {
-    //         this.scene.start("scene1");
-    //     }
-    }
 }

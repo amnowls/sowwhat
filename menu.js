@@ -7,15 +7,21 @@ export function createMenu(scene, {
     options,       // [ "Option text", ... ]
     callbacks,     // [ ()=>{}, ()=>{}, ... ]
     startY = 150,
-    gap = 30
+    gap = 30,
+    startX = 50
 }) {
 
     // --- Draw Title ---
     centerText(scene, title);
 
     // --- Build menu option texts ---
-    const optionObjects = options.map((text, i) =>
-        centerText(scene, text, startY + i * gap, { fill: "#fbff94ff" })
+    const optionObjects = options.map((text, i) => {
+            const textObj = scene.add.text(0, 0, text, { fontSize: '24px', fill: "#ffffffff" });
+    const centerY = scene.scale.height / 2 + (startY + i * gap);
+    textObj.setPosition(startX, centerY);
+    textObj.setOrigin(0, 0.5); // left-align horizontally, center vertically
+    return textObj;
+    }
     );
 
     let index = 0;
@@ -55,8 +61,8 @@ export function createMenu(scene, {
     };
 
     // --- Optional mouse click support ---
-    optionObjects.forEach((opt, i) => {
-        opt.setInteractive();
-        opt.on("pointerdown", () => callbacks[i]());
-    });
+    // optionObjects.forEach((opt, i) => {
+    //     opt.setInteractive();
+    //     opt.on("pointerdown", () => callbacks[i]());
+    // });
 }
