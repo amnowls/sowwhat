@@ -11,11 +11,11 @@ export default class scene1 extends Phaser.Scene {
             );         
         centerText(this, "press SPACE to continue...", +150);
         this.input.once("pointerdown", () => {
-        this.scene.start("scene2");
+        this.scene.start("certify");
         });
     
         // use space or enter to switch scene
-        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene2"));
-        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene2"));
+        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("cropchoice"));
+        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("cropchoice"));
     }
 }

@@ -2,12 +2,12 @@
 // this is for keyboard toggles/input
 import { centerText } from "./ui.js";
 
-export function createMenu(scene, { 
-    title, 
+export function createMenu(scene, {
+    title,
     options,       // [ "Option text", ... ]
     callbacks,     // [ ()=>{}, ()=>{}, ... ]
-    startY = 150, 
-    gap = 30 
+    startY = 150,
+    gap = 30
 }) {
 
     // --- Draw Title ---
@@ -22,8 +22,8 @@ export function createMenu(scene, {
 
     const updateHighlight = () => {
         optionObjects.forEach((opt, i) => {
-            opt.setStyle({ fill: i === index ? "#ffffff" : "#fbff94ff" });
-            opt.setScale(i === index ? 1.05 : 1);
+            opt.setStyle({ fill: i === index ? "#fbff94ff" : "#ffffffff" });
+            opt.setScale(i === index ? 1.1 : 1);
         });
     };
     updateHighlight();
@@ -38,7 +38,7 @@ export function createMenu(scene, {
     const keyEnter = scene.input.keyboard.addKey(K.ENTER);
 
     // --- Add update loop ---
-    scene.input.keyboard.on("keydown", () => {}, scene); // ensures update is called
+    scene.input.keyboard.on("keydown", () => { }, scene); // ensures update is called
 
     scene.update = function () {
         if (Phaser.Input.Keyboard.JustDown(keyUp) || Phaser.Input.Keyboard.JustDown(keyW)) {

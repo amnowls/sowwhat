@@ -9,10 +9,9 @@ export default class titlescene extends Phaser.Scene {
     //     // preload assets here
     //     // this.load.image("logo", "path/to/logo.png");
     // }
-
     create() {
 
-        centerText(this, "LISCENSE TO SOW", 0, {fontSize: "80px"});
+        centerText(this, "LICENCE TO SOW", 0, {fontSize: "80px"});
         centerText(this, "press SPACE to start", +150)
 
         // uncomment below for mouse clicks to switch scene
@@ -26,6 +25,7 @@ export default class titlescene extends Phaser.Scene {
     }
 
     update() {
+        
     //     if (
     //         Phaser.Input.Keyboard.JustDown(this.keySpace) ||
     //         Phaser.Input.Keyboard.JustDown(this.keyEnter)
