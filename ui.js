@@ -1,13 +1,13 @@
-export function centerText(scene, text, yOffset = 0, style = {}, originX = 0.5, originY = 0.5) {
+export function centerText(scene, msg, yOffset = 0, style = {}) {
     const { width, height } = scene.scale;
-    return scene.add.text(width / 2, height / 2 + yOffset, text, {
-        fontSize: "32px",
-        fill: "#ffffff",
-        align: "left",
-        ...style
-        // wordWrap: { width: this.scale.width * 0.7 }  // wrap at 70% of screen width
-    }).setOrigin(originX, originY);;
+    return scene.add.text(
+        width / 2,
+        height / 2 + yOffset,
+        msg,
+        {
+            fontSize: style.fontSize || '32px',
+            fill: style.fill || '#ffffff',
+            align: style.align || 'center'
+        }
+    ).setOrigin(0.5);
 }
-
-
-//(originX, originY);

@@ -5,16 +5,17 @@ export default class scene1 extends Phaser.Scene {
     }
 
     create() {
-        // this.add.text(100, 250, "you are a small-scale farmer in rural kenya.\nyour local community relies on the yield\n from you and your neighbors' farms", {
-        //     fontSize: "24px",
-        // });
 
         centerText(this, "you are a small-scale farmer in rural kenya.\nyour local community relies on the yield\nfrom you and your neighbors' farms",
             0,
-        );         
-
+            );         
+        centerText(this, "press SPACE to continue...", +150);
         this.input.once("pointerdown", () => {
-            this.scene.start("scene2");
+        this.scene.start("scene2");
         });
+    
+        // use space or enter to switch scene
+        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene2"));
+        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene2"));
     }
 }

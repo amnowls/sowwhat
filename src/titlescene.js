@@ -11,19 +11,26 @@ export default class titlescene extends Phaser.Scene {
     // }
 
     create() {
-        // const { width, height } = this.scale;
-        // this.add.text(width / 2, height / 2, "LISCENCE TO SOW", {
-        //     fontSize: "32px",
-        //     fill: "#ffffff",
-        //     align: "center"   // "left", "right", or "center"
 
-        // }).setOrigin(0.5);
-        centerText(this, "LISCENSE TO SOW", 0, {fontSize: 80});
-        // console.log(t.style.fontSize);   // should output "80px"
-        // this.add.text(300, 450, "click screen to start");
-        centerText(this, "click the screen to start", +150)
-        this.input.once("pointerdown", () => {
-            this.scene.start("scene1");
-        });
+        centerText(this, "LISCENSE TO SOW", 0, {fontSize: "80px"});
+        centerText(this, "press SPACE to start", +150)
+
+        // uncomment below for mouse clicks to switch scene
+        // this.input.once("pointerdown", () => {
+        //     this.scene.start("scene1");
+        // });
+
+        // use space or enter to switch scene
+        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene1"));
+        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene1"));
+    }
+
+    update() {
+    //     if (
+    //         Phaser.Input.Keyboard.JustDown(this.keySpace) ||
+    //         Phaser.Input.Keyboard.JustDown(this.keyEnter)
+    //     ) {
+    //         this.scene.start("scene1");
+    //     }
     }
 }

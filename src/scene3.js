@@ -4,7 +4,7 @@ export default class scene3 extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(20, 20, "your farm is ok", {
+        this.add.text(20, 20, "", {
             fontSize: "28px",
             fill: "#ffffff"
         });
