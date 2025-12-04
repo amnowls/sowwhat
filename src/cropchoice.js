@@ -11,7 +11,7 @@ export default class cropchoice extends Phaser.Scene {
         this.scene.setVisible(true, 'hud');
 
       createMenu(this, {
-            title: "what seed?",
+            title: "what type of crop would you like to plant?",
             options: [
                 "[ cassava ]",
                 "[ cowpea ]",

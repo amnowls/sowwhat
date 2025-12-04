@@ -5,9 +5,9 @@ export default class scene4 extends Phaser.Scene {
     constructor() {
         super("scene4");
     }
-    preload() {
-    this.load.image("radio", "assets/animated-radio-image-0064.gif");
-        }       
+    // preload() {
+    // this.load.image("radio", "assets/animated-radio-image-0064.gif");
+    //     }       
     create() {
         this.scene.setVisible(false, 'hud');
         // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2.5, 'radio');

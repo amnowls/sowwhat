@@ -12,7 +12,7 @@ export default class titlescene extends Phaser.Scene {
     create() {
 
         centerText(this, "LICENCE TO SOW", 0, {fontSize: "80px"});
-        centerText(this, "press SPACE to start", +150)
+        centerText(this, "press SPACE to start", 150)
 
         // uncomment below for mouse clicks to switch scene
         // this.input.once("pointerdown", () => {
