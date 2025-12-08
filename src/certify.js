@@ -20,20 +20,20 @@ export default class certify extends Phaser.Scene {
                 () => {
                     this.game.globalState.money -= 50;
                     this.game.globalState.corporateDependency += 4;
-                    this.game.globalState.neighborScore -= 5;
+                    this.game.globalState.neighborScore -= 2;
                     this.game.globalState.certified = true;
 
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene5");
+                    this.scene.start("scene6");
                 },
                 () => {
                     this.game.globalState.money += 10;
                     this.game.globalState.corporateDependency -= 2;
-                    this.game.globalState.neighborScore += 2;
+                    this.game.globalState.neighborScore += 1;
                     this.game.globalState.certified = false;
 
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene5");
+                    this.scene.start("scene6");
                 }
             ]
         });

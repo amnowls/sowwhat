@@ -1,15 +1,15 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
 
-export default class scene5 extends Phaser.Scene {
+export default class scene6 extends Phaser.Scene {
     constructor() {
-        super("scene5");
+        super("scene6");
     }
 
     create() {
         // this.scene.setVisible(false, 'hud');
 
-    centerText(this, "RADIO CRACKLES: new law passed!\n\n'" + this.game.globalState.crop + " seeds are now patented by Monsanto.\nall farmers must use certified seeds from\ncorporate suppliers. penalties for non-compliance\ninclude fines and loss of land tenure.'");
+    centerText(this, "");
         this.input.keyboard.once("keydown-SPACE", () => this.scene.start("certify"));
         this.input.keyboard.once("keydown-ENTER", () => this.scene.start("certify"));           
     }

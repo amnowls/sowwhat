@@ -9,6 +9,7 @@ export default class cropchoice extends Phaser.Scene {
     create() {
         // shows hud
         this.scene.setVisible(true, 'hud');
+        centerText(this, "user ARROW keys and SPACEBAR to make selections", +100, {fontSize: '18px'});
 
       createMenu(this, {
             title: "what type of crop would you like to plant?",

@@ -5,14 +5,15 @@ export default class titlescene extends Phaser.Scene {
         super("titlescene");
     }
 
-    // preload() {
-    //     // preload assets here
-    //     // this.load.image("logo", "path/to/logo.png");
-    // }
+    preload() {
+        // preload assets here
+        // this.load.image("radio", "assets/ascii-art.jpeg");
+    }
     create() {
-
-        centerText(this, "LICENCE TO SOW", 0, {fontSize: "80px"});
-        centerText(this, "press SPACE to start", 150)
+        // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 50, 'radio').setScale(1.5);
+        // radio.setAlpha(0.3);
+        centerText(this, "LICENCE TO SOW", 0, {fontSize: "80px", fill: "#ffffffff"});
+        centerText(this, "press SPACE to start", 150, {fill: "#ffffffff"});
 
         // uncomment below for mouse clicks to switch scene
         // this.input.once("pointerdown", () => {
