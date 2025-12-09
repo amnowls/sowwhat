@@ -13,7 +13,7 @@ var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, scene7, hud],
+    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, hud],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH

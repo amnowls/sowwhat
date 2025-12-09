@@ -8,10 +8,10 @@ export default class scene3 extends Phaser.Scene {
     }
 
     create() {
-        // centerText(this, "you've chosen " + this.game.globalState.crop + " as your seed for this planting season.",
-        // );
+        escapeReset(this);
+        centerText(this, "you've chosen " + this.game.globalState.crop + " as your seed\nfor this planting season.",
+        );
         createMenu(this, {
-            title: ["you've chosen " + this.game.globalState.crop + " as your seed for this planting season."],
             options: [
                 "[ plant seeds ]",
                 ],
