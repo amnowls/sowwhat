@@ -5,8 +5,8 @@ export function centerText(scene, msg, yOffset = 0, style = {}) {
         height / 2 + yOffset,
         msg,
         {
-            fontSize: style.fontSize || '32px',
-            // fontFamily: style.fontFamily || '',
+            fontSize: style.fontSize || '25px',
+            fontFamily: style.fontFamily || 'PressStart2P',
             fill: style.fill || '#ffffff',
             align: style.align || 'left'
         }
