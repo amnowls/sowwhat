@@ -9,7 +9,7 @@ export default class cropchoice extends Phaser.Scene {
     create() {
         // shows hud
         this.scene.setVisible(true, 'hud');
-        centerText(this, "user ARROW keys and SPACEBAR to make selections", +100, {fontSize: '18px'});
+        centerText(this, "use ARROW and RETURN keys to make selections", +100, {fontSize: '22px'});
 
       createMenu(this, {
             title: "what type of crop would you like to plant?",
@@ -21,7 +21,7 @@ export default class cropchoice extends Phaser.Scene {
             callbacks: [
                 //cassava
                 () => {
-                    this.game.globalState.neighborScore += 3;
+                    this.game.globalState.neighborScore += 1;
                     this.game.globalState.crop = "cassava";
                     this.scene.get('hud').updateStats();
                     this.scene.start("scene3");
@@ -29,7 +29,7 @@ export default class cropchoice extends Phaser.Scene {
 
                 //cowpea
                 () => {
-                    this.game.globalState.neighborScore += 2;
+                    this.game.globalState.neighborScore += 1;
                     this.game.globalState.crop = "cowpea";
                     this.scene.get('hud').updateStats();
                     this.scene.start("scene3");
@@ -38,7 +38,7 @@ export default class cropchoice extends Phaser.Scene {
                 //maize
                 () => {
                     this.game.globalState.corporateDependency += 1;
-                    this.game.globalState.neighborScore -= 2;
+                    this.game.globalState.neighborScore -= 1;
                     this.game.globalState.crop = "maize";
                     this.scene.get('hud').updateStats();
                     this.scene.start("scene3");

@@ -13,8 +13,8 @@ export default class certify extends Phaser.Scene {
       createMenu(this, {
             title: "do you want to certify your " + this.game.globalState.crop + " seeds?",
             options: [
-                "[ YES - certify ]",
-                "[ NO - keep seeds uncertified ]"
+                "[ yes: certify]",
+                "[ no: keep seeds uncertified ]"
             ],
             callbacks: [
                 () => {

@@ -6,13 +6,13 @@ export function createMenu(scene, {
     title,
     options,       // [ "Option text", ... ]
     callbacks,     // [ ()=>{}, ()=>{}, ... ]
-    startY = 150,
+    startY = 200,
     gap = 30,
     startX = 50
 }) {
 
     // --- Draw Title ---
-    centerText(scene, title);
+    centerText(scene, title, -30);
 
     // --- Build menu option texts ---
     const optionObjects = options.map((text, i) => {

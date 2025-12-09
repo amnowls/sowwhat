@@ -1,4 +1,4 @@
-export function centerText(scene, msg, yOffset = 0, style = {}) {
+export function centerText(scene, msg, yOffset = -100, style = {}) {
     const { width, height } = scene.scale;
     return scene.add.text(
         width / 2,
@@ -8,8 +8,9 @@ export function centerText(scene, msg, yOffset = 0, style = {}) {
             fontSize: style.fontSize || '32px',
             // fontFamily: style.fontFamily || '',
             fill: style.fill || '#ffffff',
-            align: style.align || 'left'
+            align: style.align || 'left',
+            wordWrap: style.wordWrap || { width: width - 450, useAdvancedWrap: true },
         }
-    ).setOrigin(0.5, .5);
+    ).setOrigin(0.5, 0);
 }
  
