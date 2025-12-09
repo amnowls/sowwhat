@@ -1,12 +1,12 @@
-export function centerText(scene, msg, yOffset = -100, style = {}) {
+export function centerText(scene, msg, yOffset = -200, style = {}) {
     const { width, height } = scene.scale;
     return scene.add.text(
         width / 2,
         height / 2 + yOffset,
         msg,
         {
-            fontSize: style.fontSize || '32px',
-            // fontFamily: style.fontFamily || '',
+            fontSize: style.fontSize || '24px',
+            fontFamily: style.fontFamily || 'PressStart2P',
             fill: style.fill || '#ffffff',
             align: style.align || 'left',
             wordWrap: style.wordWrap || { width: width * .7, useAdvancedWrap: true},

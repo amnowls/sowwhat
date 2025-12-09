@@ -18,6 +18,10 @@ var config = {
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    input: {
+        keyboard: true,
+        gamepad: false
     }
 };
 
@@ -30,6 +34,14 @@ const globalState = {
     criminalRecord: "perfect citizen",
     certified: false,
     crop: "",
+    reset(){
+        this.neighborScore = 5;
+        this.corporateDependency = 0;
+        this.money = 100;
+        this.crop = "";
+        this.certified = false;
+        this.criminalRecord = "perfect citizen";
+    }
 };
 
 var game = new Phaser.Game(config);

@@ -2,10 +2,16 @@
 
 export default class hud extends Phaser.Scene {
     constructor() {
-        super({ key: 'hud', active: false }); // active by default
+        super({ key: 'hud', active: false }); 
 
     }
+    preload(){
+         this.load.font(
+            'PressStart2P',
+            'https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/pressstart2p/PressStart2P-Regular.ttf',
+            'truetype');
 
+    }
     create() {
         this.scene.setVisible(false, 'hud');
         // Store references to text objects so we can update them

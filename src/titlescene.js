@@ -7,12 +7,16 @@ export default class titlescene extends Phaser.Scene {
 
     preload() {
         // preload assets here
+          this.load.font(
+            'PressStart2P',
+            'https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/pressstart2p/PressStart2P-Regular.ttf',
+            'truetype');
         // this.load.image("radio", "assets/ascii-art.jpeg");
     }
     create() {
         // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 50, 'radio').setScale(1.5);
         // radio.setAlpha(0.3);
-        centerText(this, "LICENCE TO SOW", 0, {fontSize: "80px", fill: "#ffffffff", align: "center"});
+        centerText(this, "LICENCE TO SOW", 0, {fontFamily: 'PressStart2P', fontSize: "60px", align: "center"});
         centerText(this, "insert seed to begin\n('S' key)", 150, {fill: "#ffffffff", align: "center"});
 
         // uncomment below for mouse clicks to switch scene

@@ -1,5 +1,7 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
+import { escapeReset } from "../escreset.js";
+
 
 export default class certify extends Phaser.Scene {
     constructor() {
@@ -8,6 +10,7 @@ export default class certify extends Phaser.Scene {
 
     create() {
         // shows hud
+        escapeReset(this);
         this.scene.setVisible(true, 'hud');
 
       createMenu(this, {

@@ -7,7 +7,7 @@ export default class scene8 extends Phaser.Scene {
     }
 
     create() {
-
+    escapeReset(this);
     centerText(this, "the next planting season begins. it is illegal to plant your seeds");
         this.input.keyboard.once("keydown-SPACE", () => this.scene.start("certify"));
         this.input.keyboard.once("keydown-ENTER", () => this.scene.start("certify"));           

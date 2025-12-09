@@ -1,5 +1,7 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
+import { escapeReset } from "../escreset.js";
+
 
 export default class scene4 extends Phaser.Scene {
     constructor() {
@@ -14,7 +16,7 @@ export default class scene4 extends Phaser.Scene {
         // radio.setScale(2.5);
         // radio.setAlpha(0.5);
         // radio.setDepth(-1);
-
+        escapeReset(this);
         // centerText(this, "you've had a great planting season with your " + this.game.globalState.crop + " seeds. you've sold your harvest at the local market. you still have an abundance of seeds. would you like to store surplus seeds for next year, or share some with your community?");
         createMenu(this, {
             title: ["you had a great planting season with your " + this.game.globalState.crop + " seeds. you've sold your harvest at the local market. you still have an abundance of seeds. would you like to store surplus seeds for next year, or share some with your community?"],
