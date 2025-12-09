@@ -1,6 +1,5 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
-import { escapeReset } from "../escreset.js";
 
 export default class scene3 extends Phaser.Scene {
     constructor() {
@@ -8,10 +7,10 @@ export default class scene3 extends Phaser.Scene {
     }
 
     create() {
-        escapeReset(this);
-        centerText(this, "you've chosen " + this.game.globalState.crop + " as your seed\nfor this planting season.",
-        );
+        // centerText(this, "you've chosen " + this.game.globalState.crop + " as your seed for this planting season.",
+        // );
         createMenu(this, {
+            title: ["you've chosen " + this.game.globalState.crop + " as your seed for this planting season."],
             options: [
                 "[ plant seeds ]",
                 ],

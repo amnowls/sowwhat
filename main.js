@@ -6,21 +6,18 @@
 // import scene3 from "./src/scene3.js";
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
-import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, scene5, scene6} from "./src/SCENES.js";
+
+import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8} from "./src/SCENES.js";
 
 
 var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, hud],
+    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8, hud],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
-    },
-    input: {
-        keyboard: true,
-        gamepad: false
     }
 };
 
@@ -33,18 +30,10 @@ const globalState = {
     criminalRecord: "perfect citizen",
     certified: false,
     crop: "",
-
-    reset(){
-        this.neighborScore = 5;
-        this.corporateDependency = 0;
-        this.money = 100;
-        this.crop = "";
-        this.certified = false;
-        this.criminalRecord = "perfect citizen";
-    }
 };
 
 var game = new Phaser.Game(config);
 game.globalState = globalState;
 
 game.scene.start('hud');
+

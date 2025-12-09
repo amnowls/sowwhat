@@ -1,6 +1,5 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
-import { escapeReset } from "../escreset.js";
 
 export default class certify extends Phaser.Scene {
     constructor() {
@@ -9,14 +8,13 @@ export default class certify extends Phaser.Scene {
 
     create() {
         // shows hud
-        escapeReset(this);
         this.scene.setVisible(true, 'hud');
 
       createMenu(this, {
             title: "do you want to certify your " + this.game.globalState.crop + " seeds?",
             options: [
-                "[ YES - certify ]",
-                "[ NO - keep seeds uncertified ]"
+                "[ yes: certify]",
+                "[ no: keep seeds uncertified ]"
             ],
             callbacks: [
                 () => {
@@ -35,7 +33,7 @@ export default class certify extends Phaser.Scene {
                     this.game.globalState.certified = false;
 
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene6");
+                    this.scene.start("scene7");
                 }
             ]
         });

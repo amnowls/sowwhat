@@ -1,20 +1,17 @@
-export function centerText(scene, msg, yOffset = 0, style = {}) {
+export function centerText(scene, msg, yOffset = -100, style = {}) {
     const { width, height } = scene.scale;
     return scene.add.text(
         width / 2,
         height / 2 + yOffset,
         msg,
         {
-            fontSize: style.fontSize || '25px',
-            fontFamily: style.fontFamily || 'PressStart2P',
+            fontSize: style.fontSize || '32px',
+            // fontFamily: style.fontFamily || '',
             fill: style.fill || '#ffffff',
             align: style.align || 'left',
-            wordWrap: {
-            width: scene.scale.width * 0.9,
-            useAdvancedWrap: true
-            },
-            lineSpacing: 4
+            wordWrap: style.wordWrap || { width: width * .9, useAdvancedWrap: true},
+            lineSpacing: style.lineSpacing || 0.4
         }
-    ).setOrigin(0.5, .5);
+    ).setOrigin(0.5, 0);
 }
  
