@@ -1,5 +1,6 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
+import { escapeReset } from "../escreset.js";
 
 export default class scene4 extends Phaser.Scene {
     constructor() {
@@ -9,6 +10,7 @@ export default class scene4 extends Phaser.Scene {
     // this.load.image("radio", "assets/animated-radio-image-0064.gif");
     //     }       
     create() {
+        escapeReset(this);
         // this.scene.setVisible(false, 'hud');
         // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2.5, 'radio');
         // radio.setScale(2.5);

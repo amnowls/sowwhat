@@ -1,5 +1,6 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
+import { escapeReset } from "../escreset.js";
 
 export default class cropchoice extends Phaser.Scene {
     constructor() {
@@ -10,6 +11,8 @@ export default class cropchoice extends Phaser.Scene {
         // shows hud
         this.scene.setVisible(true, 'hud');
         centerText(this, "user ARROW keys and SPACEBAR to make selections", +100, {fontSize: '18px'});
+
+        escapeReset(this);
 
       createMenu(this, {
             title: "what type of crop would you like to plant?",

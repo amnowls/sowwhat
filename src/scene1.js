@@ -1,11 +1,13 @@
 import { centerText } from "../ui.js";
+import { escapeReset } from "../escreset.js";
+
 export default class scene1 extends Phaser.Scene {
     constructor() {
         super("scene1");
     }
 
     create() {
-
+        escapeReset(this);
         centerText(this, "you are a small-scale farmer in rural kenya.\nyour local community relies on the yield\nfrom you and your neighbors' farms",
             0,
             );         
