@@ -9,7 +9,7 @@ export function centerText(scene, msg, yOffset = -100, style = {}) {
             // fontFamily: style.fontFamily || '',
             fill: style.fill || '#ffffff',
             align: style.align || 'left',
-            wordWrap: style.wordWrap || { width: width * .9, useAdvancedWrap: true},
+            wordWrap: style.wordWrap || { width: width * .7, useAdvancedWrap: true},
             lineSpacing: style.lineSpacing || 0.4
         }
     ).setOrigin(0.5, 0);
