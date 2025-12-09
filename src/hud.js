@@ -16,9 +16,9 @@ export default class hud extends Phaser.Scene {
         this.scene.setVisible(false, 'hud');
         // Store references to text objects so we can update them
         const { width } = this.scale;
-        this.moneyText = this.add.text(20, 20, '', { fontSize: '24px', fill: '#ffffff' });
-        this.corpText = this.add.text(20, 50, '', { fontSize: '24px', fill: '#ffffff' });
-        this.neighborText = this.add.text(20, 80, '', { fontSize: '24px', fill: '#ffffff' });
+        this.moneyText = this.add.text(20, 20, '', { fontFamily: 'PressStart2P', fontSize: '24px', fill: '#ffffff' });
+        this.corpText = this.add.text(20, 50, '', { fontFamily: 'PressStart2P', fontSize: '24px', fill: '#ffffff' });
+        this.neighborText = this.add.text(20, 80, '', { fontFamily: 'PressStart2P', fontSize: '24px', fill: '#ffffff' });
 
         console.log("HUD created");
         // First update
