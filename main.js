@@ -37,7 +37,7 @@ const globalState = {
     reset(){
         this.neighborScore = 5;
         this.corporateDependency = 0;
-        this.money = 0;
+        this.money = 100;
         this.crop = "";
         this.certified = false;
         this.criminalRecord = "perfect citizen";

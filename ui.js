@@ -8,7 +8,12 @@ export function centerText(scene, msg, yOffset = 0, style = {}) {
             fontSize: style.fontSize || '25px',
             fontFamily: style.fontFamily || 'PressStart2P',
             fill: style.fill || '#ffffff',
-            align: style.align || 'left'
+            align: style.align || 'left',
+            wordWrap: {
+            width: scene.scale.width * 0.9,
+            useAdvancedWrap: true
+            },
+            lineSpacing: 4
         }
     ).setOrigin(0.5, .5);
 }

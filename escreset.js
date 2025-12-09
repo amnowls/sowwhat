@@ -14,6 +14,7 @@ export function escapeReset(scene) {
             scene.scene.setVisible(false, "hud");
         }
 
+        scene.scene.start("hud");
         scene.scene.start("titlescene");
     };
 
