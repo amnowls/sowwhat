@@ -1,5 +1,6 @@
 import { centerText } from "../ui.js";
 import { createMenu } from "../menu.js";
+import { escapeReset } from "../escreset.js";
 
 export default class scene6 extends Phaser.Scene {
     constructor() {

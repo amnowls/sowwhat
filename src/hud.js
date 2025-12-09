@@ -6,13 +6,21 @@ export default class hud extends Phaser.Scene {
 
     }
 
+    preload(){
+         this.load.font(
+            'PressStart2P',
+            'https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/pressstart2p/PressStart2P-Regular.ttf',
+            'truetype');
+
+    }
+
     create() {
         this.scene.setVisible(false, 'hud');
         // Store references to text objects so we can update them
         const { width } = this.scale;
-        this.moneyText = this.add.text(20, 20, '', { fontSize: '24px', fill: '#ffffff' });
-        this.corpText = this.add.text(20, 50, '', { fontSize: '24px', fill: '#ffffff' });
-        this.neighborText = this.add.text(20, 80, '', { fontSize: '24px', fill: '#ffffff' });
+        this.moneyText = this.add.text(20, 20, '', { fontFamily: 'PressStart2P' ,fontSize: '18px', fill: '#ffffff' });
+        this.corpText = this.add.text(20, 50, '', { fontFamily: 'PressStart2P' ,fontSize: '18px', fill: '#ffffff' });
+        this.neighborText = this.add.text(20, 80, '', { fontFamily: 'PressStart2P' ,fontSize: '18px', fill: '#ffffff' });
 
         console.log("HUD created");
         // First update
