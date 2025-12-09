@@ -7,3 +7,4 @@ export { default as scene3 } from "./scene3.js";
 export { default as scene4 } from "./scene4.js";
 export { default as scene5 } from "./scene5.js";
 export { default as scene6 } from "./scene6.js";
+export  {default as scene7 } from "./scene7.js";

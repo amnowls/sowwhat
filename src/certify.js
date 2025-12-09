@@ -33,7 +33,7 @@ export default class certify extends Phaser.Scene {
                     this.game.globalState.certified = false;
 
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene6");
+                    this.scene.start("scene7");
                 }
             ]
         });
