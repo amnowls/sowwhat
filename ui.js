@@ -1,4 +1,4 @@
-export function centerText(scene, msg, yOffset = -200, style = {}) {
+export function centerText(scene, msg, yOffset = 0, style = {}) {
     const { width, height } = scene.scale;
     return scene.add.text(
         width / 2,

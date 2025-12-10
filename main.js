@@ -7,14 +7,14 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8} from "./src/SCENES.js";
+import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10} from "./src/SCENES.js";
 
 
 var config = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8, hud],
+    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10, hud],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH

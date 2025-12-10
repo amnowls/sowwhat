@@ -29,7 +29,7 @@ export default class cropchoice extends Phaser.Scene {
         // shows hud
         this.scene.setVisible(true, 'hud');
         escapeReset(this);
-        centerText(this, "use ARROW and RETURN keys to make selections", +100, {fontSize: '22px'});
+        centerText(this, "use joystick and button to make selections", +100, {fontSize: '22px'});
         this.anims.create({
             key: 'cassava_anim',
             frames: this.anims.generateFrameNumbers('cassava', { start: 0, end: 4 }),

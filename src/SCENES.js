@@ -9,3 +9,5 @@ export { default as scene5 } from "./scene5.js";
 export { default as scene6 } from "./scene6.js";
 export  {default as scene7 } from "./scene7.js";
 export  {default as scene8 } from "./scene8.js";
+export  {default as scene9 } from "./scene9.js";
+export  {default as scene10 } from "./scene10.js";

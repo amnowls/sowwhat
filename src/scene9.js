@@ -3,9 +3,9 @@ import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
 
 
-export default class scene8 extends Phaser.Scene {
+export default class scene9 extends Phaser.Scene {
     constructor() {
-        super("scene8");
+        super("scene9");
     }
 
     create() {
