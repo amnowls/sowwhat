@@ -10,7 +10,7 @@ export default class scene9 extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-    centerText(this, "the next planting season begins. it is illegal to plant your seeds as they have not been certified. you must choose between illegally planting seeds or trading seeds with your neighbors");
+    centerText(this, "the next planting season begins. you may legally plant your seeds as they have been certified.");
     createMenu(this, {
         // title: "you must choose between illegally planting seeds or trading seeds with your neighbors",
         options: [
@@ -19,10 +19,14 @@ export default class scene9 extends Phaser.Scene {
         callbacks: [
                 () => {
                 this.game.globalState.criminalRecord = "outlawed farmer";
-                this.start.scene.start("scene9");},
+                this.scene.get('hud').updateStats();
+                this.scene.start("scene10");
+            },
                 () => {
                 this.game.globalState.neighborScore += 1;
-                this.start.scene.start("scene10");},
+                this.scene.get('hud').updateStats();
+                this.scene.start("scene10");
+            },
             ]
         }
         );

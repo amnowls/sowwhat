@@ -7,6 +7,8 @@ export default class titlescene extends Phaser.Scene {
 
     preload() {
         // preload assets here
+        this.load.audio('menuMove', 'assets/sounds/move.wav');
+        this.load.audio('menuSelect', 'assets/sounds/select.wav');
           this.load.font(
             'PressStart2P',
             'https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/pressstart2p/PressStart2P-Regular.ttf',

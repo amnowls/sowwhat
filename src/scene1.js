@@ -1,4 +1,4 @@
-import { centerText } from "../ui.js";
+import { centerText, createTypewriterText } from "../ui.js";
 import { escapeReset } from "../escreset.js";
 
 export default class scene1 extends Phaser.Scene {
@@ -6,15 +6,21 @@ export default class scene1 extends Phaser.Scene {
         super("scene1");
     }
 
-    create() {
-        escapeReset(this);
-        centerText(this, "you are a small-scale farmer in rural kenya. your local community relies on the yield from you and your neighbors' farms",
-            0,
-            );         
-        centerText(this, "press button to continue", 150);
+create() {
+    escapeReset(this);
+    
+    // Create typewriter text with animation
+    createTypewriterText(
+        this,
+        "you are a small-scale farmer in rural kenya. your local community relies on the yield from you and your neighbors' farms. your GOAL is to maintain your farm to feed your community.\n\nbut BE CAREFUL... a wrong decision could lead to disaster. make your choices wisely.",
+        -70,
+        {},
+        60
+    );
+    
+    centerText(this, "press button to continue", 150);
 
-        // use space or enter to switch scene
-        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("cropchoice"));
-        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("cropchoice"));
-    }
+    this.input.keyboard.once("keydown-SPACE", () => this.scene.start("cropchoice"));
+    this.input.keyboard.once("keydown-ENTER", () => this.scene.start("cropchoice"));
+}
 }

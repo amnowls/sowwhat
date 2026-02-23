@@ -11,7 +11,7 @@ export default class scene4 extends Phaser.Scene {
     // this.load.image("radio", "assets/animated-radio-image-0064.gif");
     //     }       
     create() {
-        // this.scene.setVisible(false, 'hud');
+        this.scene.setVisible(true, 'hud');
         // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2.5, 'radio');
         // radio.setScale(2.5);
         // radio.setAlpha(0.5);
@@ -28,12 +28,12 @@ export default class scene4 extends Phaser.Scene {
                 () => {
                     this.game.globalState.neighborScore -= 1;
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene5");
+                    this.scene.start("seedlaw");
                 },
                 () => {
                     this.game.globalState.neighborScore += 2;
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene5");
+                    this.scene.start("seedlaw");
                 }
             ]
         });

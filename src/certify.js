@@ -11,17 +11,17 @@ export default class certify extends Phaser.Scene {
     create() {
         // shows hud
         escapeReset(this);
-        this.scene.setVisible(true, 'hud');
+        // this.scene.setVisible(true, 'hud');
 
       createMenu(this, {
             title: "do you want to certify your " + this.game.globalState.crop + " seeds?",
             options: [
-                "[ yes: certify -$30 ]",
+                "[ yes: certify -$35 ]",
                 "[ no: keep seeds uncertified ]"
             ],
             callbacks: [
                 () => {
-                    this.game.globalState.money -= 50;
+                    this.game.globalState.money -= 35;
                     this.game.globalState.corporateDependency += 4;
                     this.game.globalState.neighborScore -= 2;
                     this.game.globalState.certified = true;

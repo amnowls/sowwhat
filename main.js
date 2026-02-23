@@ -7,14 +7,15 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10} from "./src/SCENES.js";
-
+import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, scene11, scene12, scene13, scene14, scene15} from "./src/SCENES.js";
+import musicscene from "./src/musicscene.js";
 
 var config = {
     type: Phaser.AUTO,
+    backgroundColor: "#ffb000",
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, scene1,cropchoice, certify, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10, hud],
+    scene: [titlescene, hud, scene1,cropchoice, certify, scene3, scene4, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, , scene11, scene12, scene13, scene14, scene15],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -46,6 +47,32 @@ const globalState = {
 
 var game = new Phaser.Game(config);
 game.globalState = globalState;
+
+// Create lightweight global HTML5 Audio objects for select and move sounds
+// so any scene can trigger them regardless of Phaser preload order.
+window.__globalSelectAudio = new Audio('assets/sounds/select.wav');
+window.__globalSelectAudio.preload = 'auto';
+window.__globalMoveAudio = new Audio('assets/sounds/move.wav');
+window.__globalMoveAudio.preload = 'auto';
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.keyCode === 32) {
+        try {
+            window.__globalSelectAudio.currentTime = 0;
+            window.__globalSelectAudio.play().catch(() => {});
+        } catch (err) {
+            // ignore play errors (autoplay policy, etc.)
+        }
+    }
+});
+
+// ===== ENABLE/DISABLE MUSIC =====
+const ENABLE_MUSIC = false;  // Set to true to enable background music
+// ================================
+
+if (ENABLE_MUSIC) {
+    game.scene.add('musicscene', musicscene);
+    game.scene.start('musicscene');
+}
 
 game.scene.start('hud');
 
