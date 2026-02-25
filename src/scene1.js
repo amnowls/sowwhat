@@ -12,7 +12,7 @@ create() {
     // Create typewriter text with animation
     createTypewriterText(
         this,
-        "you are a small-scale farmer in rural kenya. your local community relies on the yield from you and your neighbors' farms. your GOAL is to maintain your farm to feed your community.\n\nbut BE CAREFUL... a wrong decision could lead to disaster. make your choices wisely.",
+        "you are a small-scale farmer in rural kenya. your local community relies on the yield from you and your neighbors' farms. your goal is to maintain your farm to feed your community.\n\nbut BE CAREFUL... a wrong decision could lead to disaster. make your choices wisely.",
         -70,
         {},
         60

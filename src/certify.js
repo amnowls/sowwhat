@@ -27,6 +27,10 @@ export default class certify extends Phaser.Scene {
                     this.game.globalState.certified = true;
 
                     this.scene.get('hud').updateStats();
+                if (window.__globalMoneyAudio) {
+                    window.__globalMoneyAudio.currentTime = 0;
+                    window.__globalMoneyAudio.play().catch(() => {});
+                }   
                     this.scene.start("scene6");
                 },
                 () => {
@@ -36,7 +40,7 @@ export default class certify extends Phaser.Scene {
                     this.game.globalState.certified = false;
 
                     this.scene.get('hud').updateStats();
-                    this.scene.start("scene8");
+                    this.scene.start("scene7a");
                 }
             ]
         });

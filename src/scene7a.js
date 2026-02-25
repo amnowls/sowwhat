@@ -9,8 +9,8 @@ export default class scene7a extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-    centerText(this, "your neighbours also chose to certify their seeds. the community is now under the control of the corporation and struggling financially due to certification costs.");
+    centerText(this, "your neighbours CERTIFIED their seeds. XXXXX");
     centerText(this, "press button to continue", 180);
-        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene9"));
-        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene9"));}
+        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene8"));
+        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene8"));}
 }

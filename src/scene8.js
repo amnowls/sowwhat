@@ -10,9 +10,9 @@ export default class scene8 extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-    centerText(this, "the next planting season begins. it is illegal to plant your seeds as they have not been certified. you must choose between illegally planting seeds or trading seeds with your neighbors");
+    // centerText(this, "the next planting season begins. it is ILLEGAL to plant your seeds as they have not been certified. doing so may result in fines, criminal charges, or other penalties. you must choose between illegally planting seeds or trading seeds with your neighbors");
     createMenu(this, {
-        // title: "you must choose between illegally planting seeds or trading seeds with your neighbors",
+        title: "the next planting season begins. it is ILLEGAL to plant your seeds as they have not been certified. doing so may result in fines, criminal charges, or other penalties. you must choose between illegally planting seeds or trading seeds with your neighbors",
         options: [
             "[ plant illegally ]",
             "[ trade seeds with neighbors ]"],

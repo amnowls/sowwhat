@@ -11,29 +11,24 @@ export default class scene4 extends Phaser.Scene {
     // this.load.image("radio", "assets/animated-radio-image-0064.gif");
     //     }       
     create() {
-        this.scene.setVisible(true, 'hud');
-        // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2.5, 'radio');
-        // radio.setScale(2.5);
-        // radio.setAlpha(0.5);
-        // radio.setDepth(-1);
+
         escapeReset(this);
+        this.scene.setVisible(true, 'hud');
+
         // centerText(this, "you've had a great planting season with your " + this.game.globalState.crop + " seeds. you've sold your harvest at the local market. you still have an abundance of seeds. would you like to store surplus seeds for next year, or share some with your community?");
         createMenu(this, {
-            title: ["you had a great planting season with your " + this.game.globalState.crop + " seeds. you've sold your harvest at the local market. you still have an abundance of seeds. would you like to store surplus seeds for next year, or share some with your community?"],
+            title: ["HARVEST:\nYIELD:\nSOIL HEALTH:\n\nsell harvest at the market to make your season's profit."],
             options: [
-                "[ store seeds for next year ]",
-                "[ share seeds with community ]",
+                "[ sell harvest ]",
             ],
             callbacks: [
                 () => {
-                    this.game.globalState.neighborScore -= 1;
-                    this.scene.get('hud').updateStats();
-                    this.scene.start("seedlaw");
-                },
-                () => {
-                    this.game.globalState.neighborScore += 2;
-                    this.scene.get('hud').updateStats();
-                    this.scene.start("seedlaw");
+                //money sound effecr
+                if (window.__globalMoneyAudio) {
+                    window.__globalMoneyAudio.currentTime = 0;
+                    window.__globalMoneyAudio.play().catch(() => {});
+                }               
+                this.scene.start("loading1");
                 }
             ]
         });

@@ -16,9 +16,8 @@ export default class titlescene extends Phaser.Scene {
         // this.load.image("radio", "assets/ascii-art.jpeg");
     }
     create() {
-        // const radio = this.add.image(this.scale.width / 2, this.scale.height / 2 - 50, 'radio').setScale(1.5);
-        // radio.setAlpha(0.3);
-        centerText(this, "SOW WHAT?!", 0, {fontFamily: 'PressStart2P', fontSize: "80px", align: "center"});
+        this.cameras.main.setBackgroundColor("#1645f5");
+        centerText(this, "SOW WHAT?!", 0, {fontFamily: 'PressStart2P', fontSize: "80px", fill: '#ffb000', align: "center"});
         // centerText(this, "insert seed to begin\n('S' key)", 150, {fill: "#ffffffff", align: "center"});
         centerText(this, "press button to begin", 150, {fill: "#ffffffff", align: "center"});
 

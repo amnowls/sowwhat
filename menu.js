@@ -9,7 +9,9 @@ export function createMenu(scene, {
     startY = 200,
     fontSize = '18px',
     gap = 30,
-    startX = 50
+    startX = 50,
+    fontColor = "#ffffff",
+    highlightColor = "#1645f5"
 }) {
 
     // --- Draw Title ---
@@ -17,19 +19,22 @@ export function createMenu(scene, {
 
     // --- Build menu option texts ---
     const optionObjects = options.map((text, i) => {
-        const textObj = scene.add.text(0, 0, text, {fontFamily: 'PressStart2P', fontSize: '17px', fill: "#1645f5" });
-        const centerY = scene.scale.height / 2 + (startY + i * gap)+25;
-        textObj.setPosition(startX +150, centerY);
+        const textObj = scene.add.text(0, 0, text, {
+            fontFamily: 'PressStart2P',
+            fontSize: '17px',
+            fill: fontColor
+        });
+        const centerY = scene.scale.height / 2 + (startY + i * gap) + 25;
+        textObj.setPosition(startX + 150, centerY);
         textObj.setOrigin(0, 0.5); // left-align horizontally, center vertically
         return textObj;
-        }
-    );
+    });
 
     let index = 0;
 
     const updateHighlight = () => {
         optionObjects.forEach((opt, i) => {
-            opt.setStyle({ fill: i === index ? "#1645f5" : "#ffffffff" });
+            opt.setStyle({ fill: i === index ? highlightColor : fontColor });
             opt.setScale(i === index ? 1.1 : 1);
         });
     };

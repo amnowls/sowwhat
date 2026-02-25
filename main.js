@@ -7,7 +7,7 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, scene1, cropchoice, certify, scene3, scene4, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, scene11, scene12, scene13, scene14, scene15} from "./src/SCENES.js";
+import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, scene10a, scene11, scene12, scene13, scene14, scene15} from "./src/SCENES.js";
 import musicscene from "./src/musicscene.js";
 
 var config = {
@@ -15,7 +15,7 @@ var config = {
     backgroundColor: "#ffb000",
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, hud, scene1,cropchoice, certify, scene3, scene4, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, , scene11, scene12, scene13, scene14, scene15],
+    scene: [titlescene, hud, loading1, scene1,cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, scene10a, scene11, scene12, scene13, scene14, scene15],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -35,6 +35,16 @@ const globalState = {
     criminalRecord: "perfect citizen",
     certified: false,
     crop: "",
+    fines: 0,
+    soilhealthStates: ["deteriorated", "poor", "fair", "good", "excellent"],
+    soilhealthIndex: 3, // 0: deteriorated, 1: poor, 2: fair, 3: good, 4: excellent
+    get soilhealth() {
+        return this.soilhealthStates[this.soilhealthIndex];
+    },
+    set soilhealth(val) {
+        const idx = this.soilhealthStates.indexOf(val);
+        if (idx !== -1) this.soilhealthIndex = idx;
+    },
     reset(){
         this.neighborScore = 5;
         this.corporateDependency = 0;
@@ -42,6 +52,8 @@ const globalState = {
         this.crop = "";
         this.certified = false;
         this.criminalRecord = "perfect citizen";
+        this.fines = 0;
+        this.soilhealthIndex = 3;
     }
 };
 
@@ -54,6 +66,8 @@ window.__globalSelectAudio = new Audio('assets/sounds/select.wav');
 window.__globalSelectAudio.preload = 'auto';
 window.__globalMoveAudio = new Audio('assets/sounds/move.wav');
 window.__globalMoveAudio.preload = 'auto';
+window.__globalMoneyAudio = new Audio('assets/sounds/money.wav');
+window.__globalMoneyAudio.preload = 'auto';
 window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' || e.keyCode === 32) {
         try {
@@ -66,7 +80,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 // ===== ENABLE/DISABLE MUSIC =====
-const ENABLE_MUSIC = false;  // Set to true to enable background music
+const ENABLE_MUSIC = true;  // Set to true to enable background music
 // ================================
 
 if (ENABLE_MUSIC) {

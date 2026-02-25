@@ -22,8 +22,7 @@ export default class scene6 extends Phaser.Scene {
             ],
             callbacks: [
                 () => {
-                    const nextScene = Math.random() < 0.5 ? "scene7" : "scene7a";
-                    this.scene.start(nextScene);
+                    this.scene.start("scene7");
                 }
             ]
         }
