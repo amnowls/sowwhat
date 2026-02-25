@@ -41,4 +41,10 @@ export default class loading1 extends Phaser.Scene {
             });
         });
     }
+    // Ensure update is called for menu input
+    update(time, delta) {
+        if (typeof this.update === 'function' && this.update !== loading1.prototype.update) {
+            this.update(time, delta);
+        }
+    }
 }
