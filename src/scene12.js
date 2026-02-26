@@ -19,11 +19,11 @@ export default class scene12 extends Phaser.Scene {
         callbacks: [
                 () => {
                 this.game.globalState.criminalRecord = "outlawed farmer";
-                this.start.scene.start("scene1");
+                this.scene.start("scene1");
             },
                 () => {
                 this.game.globalState.neighborScore += 1;
-                this.start.scene.start("scene1");
+                this.scene.start("scene1");
             },
             ]
         }

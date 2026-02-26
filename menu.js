@@ -40,34 +40,15 @@ export function createMenu(scene, {
     };
     updateHighlight();
 
-    // --- Input keys ---
+    // --- Input events for menu navigation and selection ---
     const K = Phaser.Input.Keyboard.KeyCodes;
-    const keyUp = scene.input.keyboard.addKey(K.UP);
-    const keyDown = scene.input.keyboard.addKey(K.DOWN);
-    const keyW = scene.input.keyboard.addKey(K.W);
-    const keyS = scene.input.keyboard.addKey(K.S);
-    const keySpace = scene.input.keyboard.addKey(K.SPACE);
-    const keyEnter = scene.input.keyboard.addKey(K.ENTER);
+    // Store references to listeners so we can remove them later if needed
+    const listeners = [];
 
-    // --- Add update loop ---
-    scene.input.keyboard.on("keydown", () => { }, scene); // ensures update is called
-
-    scene.update = function () {
-        if (Phaser.Input.Keyboard.JustDown(keyUp) || Phaser.Input.Keyboard.JustDown(keyW)) {
-            try {
-                if (scene.sound && typeof scene.sound.play === 'function' &&
-                    scene.cache && scene.cache.audio && typeof scene.cache.audio.exists === 'function' &&
-                    scene.cache.audio.exists('menuMove')) {
-                    scene.sound.play('menuMove');
-                } else if (window && window.__globalMoveAudio) {
-                    try { window.__globalMoveAudio.currentTime = 0; window.__globalMoveAudio.play().catch(()=>{}); } catch(e){}
-                }
-            } catch (e) { console.warn('Failed to play move sound', e); }
-
+    listeners.push(
+        scene.input.keyboard.on('keydown-UP', () => {
             index = (index - 1 + options.length) % options.length;
             updateHighlight();
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyDown) || Phaser.Input.Keyboard.JustDown(keyS)) {
             try {
                 if (scene.sound && typeof scene.sound.play === 'function' &&
                     scene.cache && scene.cache.audio && typeof scene.cache.audio.exists === 'function' &&
@@ -77,19 +58,77 @@ export function createMenu(scene, {
                     try { window.__globalMoveAudio.currentTime = 0; window.__globalMoveAudio.play().catch(()=>{}); } catch(e){}
                 }
             } catch (e) { console.warn('Failed to play move sound', e); }
-
+        }, scene)
+    );
+    listeners.push(
+        scene.input.keyboard.on('keydown-W', () => {
+            index = (index - 1 + options.length) % options.length;
+            updateHighlight();
+            try {
+                if (scene.sound && typeof scene.sound.play === 'function' &&
+                    scene.cache && scene.cache.audio && typeof scene.cache.audio.exists === 'function' &&
+                    scene.cache.audio.exists('menuMove')) {
+                    scene.sound.play('menuMove');
+                } else if (window && window.__globalMoveAudio) {
+                    try { window.__globalMoveAudio.currentTime = 0; window.__globalMoveAudio.play().catch(()=>{}); } catch(e){}
+                }
+            } catch (e) { console.warn('Failed to play move sound', e); }
+        }, scene)
+    );
+    listeners.push(
+        scene.input.keyboard.on('keydown-DOWN', () => {
             index = (index + 1) % options.length;
             updateHighlight();
-        }
-        if (Phaser.Input.Keyboard.JustDown(keySpace) || Phaser.Input.Keyboard.JustDown(keyEnter)) {
-
-            const cb = callbacks[index];
-            if (typeof cb === 'function') {
-                try { cb(); } catch (e) { console.error('Menu callback threw', e); }
-            } else {
-                console.warn('Menu callback is not a function at index', index);
+            try {
+                if (scene.sound && typeof scene.sound.play === 'function' &&
+                    scene.cache && scene.cache.audio && typeof scene.cache.audio.exists === 'function' &&
+                    scene.cache.audio.exists('menuMove')) {
+                    scene.sound.play('menuMove');
+                } else if (window && window.__globalMoveAudio) {
+                    try { window.__globalMoveAudio.currentTime = 0; window.__globalMoveAudio.play().catch(()=>{}); } catch(e){}
+                }
+            } catch (e) { console.warn('Failed to play move sound', e); }
+        }, scene)
+    );
+    listeners.push(
+        scene.input.keyboard.on('keydown-S', () => {
+            index = (index + 1) % options.length;
+            updateHighlight();
+            try {
+                if (scene.sound && typeof scene.sound.play === 'function' &&
+                    scene.cache && scene.cache.audio && typeof scene.cache.audio.exists === 'function' &&
+                    scene.cache.audio.exists('menuMove')) {
+                    scene.sound.play('menuMove');
+                } else if (window && window.__globalMoveAudio) {
+                    try { window.__globalMoveAudio.currentTime = 0; window.__globalMoveAudio.play().catch(()=>{}); } catch(e){}
+                }
+            } catch (e) { console.warn('Failed to play move sound', e); }
+        }, scene)
+    );
+    // Selection (space or enter)
+    const selectHandler = () => {
+        try {
+            if (scene.sound && typeof scene.sound.play === 'function' &&
+                scene.cache && scene.cache.audio && typeof scene.cache.audio.exists === 'function' &&
+                scene.cache.audio.exists('menuSelect')) {
+                scene.sound.play('menuSelect');
+            } else if (window && window.__globalSelectAudio) {
+                try { window.__globalSelectAudio.currentTime = 0; window.__globalSelectAudio.play().catch(()=>{}); } catch(e){}
             }
+        } catch (e) { console.warn('Failed to play select sound', e); }
+        const cb = callbacks[index];
+        if (typeof cb === 'function') {
+            try { cb(); } catch (e) { console.error('Menu callback threw', e); }
+        } else {
+            console.warn('Menu callback is not a function at index', index);
         }
+    };
+    listeners.push(scene.input.keyboard.on('keydown-SPACE', selectHandler, scene));
+    listeners.push(scene.input.keyboard.on('keydown-ENTER', selectHandler, scene));
+
+    // Optionally return a cleanup function to remove listeners if needed
+    return () => {
+        listeners.forEach(listener => listener.remove && listener.remove());
     };
 
     // --- Optional mouse click support ---

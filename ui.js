@@ -19,7 +19,7 @@ export function centerText(scene, msg, yOffset = 0, style = {}) {
 
 
 
-export function createTypewriterText(scene, fullText, yOffset = 0, style = {}, speed = 80) {
+export function createTypewriterText(scene, fullText, yOffset = 0, style = {}, speed = 80, onComplete) {
     const { width, height } = scene.scale;
     const textObject = scene.add.text(
         width * .15,
@@ -44,10 +44,12 @@ export function createTypewriterText(scene, fullText, yOffset = 0, style = {}, s
             if (currentIndex < fullText.length) {
                 currentIndex++;
                 textObject.setText(fullText.substring(0, currentIndex));
+                if (currentIndex === fullText.length && typeof onComplete === 'function') {
+                    onComplete();
+                }
             }
         },
         repeat: fullText.length - 1
     });
-    
     return textObject;
 }

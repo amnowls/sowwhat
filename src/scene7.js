@@ -9,8 +9,30 @@ export default class scene7 extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-    centerText(this, "your neighbours chose to NOT certify their seeds. XXXXXXX.");
-    centerText(this, "press button to continue", 180);
-        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene9"));
-        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene9"));}
+    if (this.game.globalState.certified == true) {
+        createMenu(this, {
+            title: ["your neighbors have chosen to NOT certify their seeds."],
+            options: [
+                "[ continue ]",
+            ],
+            callbacks: [
+                () => {
+                    this.scene.start("scene8");
+                }
+            ]
+        }); 
+    } else {
+        createMenu(this, {
+            title: ["your neighbors have chosen to CERTIFY their seeds."],
+            options: [
+                "[ continue ]",
+            ],
+            callbacks: [
+                () => {
+                    this.scene.start("scene8");
+                }
+            ]
+        }); 
+}
+    }
 }

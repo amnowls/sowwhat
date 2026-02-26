@@ -1,3 +1,4 @@
+import { createMenu } from "../menu.js";
 import { centerText } from "../ui.js";
 
 export default class titlescene extends Phaser.Scene {
@@ -21,15 +22,21 @@ export default class titlescene extends Phaser.Scene {
         // centerText(this, "insert seed to begin\n('S' key)", 150, {fill: "#ffffffff", align: "center"});
         centerText(this, "press button to begin", 150, {fill: "#ffffffff", align: "center"});
 
-        // uncomment below for mouse clicks to switch scene
-        // this.input.once("pointerdown", () => {
-        //     this.scene.start("scene1");
-        // });
+        createMenu(this, {
+            options: [
+                ""],
+            callbacks: [
+                () => {
+                    this.scene.start("scene1");
+                }]})
+                }
+    //     // uncomment below for mouse clicks to switch scene
+    //     // this.input.once("pointerdown", () => {
+    //     //     this.scene.start("scene1");
+    //     // });
 
-        // use space or enter to switch scene
-        this.input.keyboard.on("keydown-S", () => this.scene.start("scene1"));
-        this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene1"));
-        this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene1"));
+    //     // use space or enter to switch scene
+    //     this.input.keyboard.on("keydown-S", () => this.scene.start("scene1"));
+    //     this.input.keyboard.once("keydown-SPACE", () => this.scene.start("scene1"));
+    //     this.input.keyboard.once("keydown-ENTER", () => this.scene.start("scene1"));
     }
-
-}

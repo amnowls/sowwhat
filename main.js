@@ -7,7 +7,7 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, scene10a, scene11, scene12, scene13, scene14, scene15} from "./src/SCENES.js";
+import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, scene11, scene12, scene13, scene14, scene15} from "./src/SCENES.js";
 import musicscene from "./src/musicscene.js";
 
 var config = {
@@ -15,7 +15,7 @@ var config = {
     backgroundColor: "#ffb000",
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, hud, loading1, scene1,cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene7a, scene8, scene9, scene10, scene10a, scene11, scene12, scene13, scene14, scene15],
+    scene: [titlescene, hud, loading1, scene1,cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, scene11, scene12, scene13, scene14, scene15],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -36,6 +36,7 @@ const globalState = {
     certified: false,
     crop: "",
     fines: 0,
+    pesticides: false,
     soilhealthStates: ["deteriorated", "poor", "fair", "good", "excellent"],
     soilhealthIndex: 3, // 0: deteriorated, 1: poor, 2: fair, 3: good, 4: excellent
     get soilhealth() {
@@ -53,6 +54,7 @@ const globalState = {
         this.certified = false;
         this.criminalRecord = "perfect citizen";
         this.fines = 0;
+        this.pesticides = false;
         this.soilhealthIndex = 3;
     }
 };
@@ -69,14 +71,8 @@ window.__globalMoveAudio.preload = 'auto';
 window.__globalMoneyAudio = new Audio('assets/sounds/money.wav');
 window.__globalMoneyAudio.preload = 'auto';
 window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' || e.keyCode === 32) {
-        try {
-            window.__globalSelectAudio.currentTime = 0;
-            window.__globalSelectAudio.play().catch(() => {});
-        } catch (err) {
-            // ignore play errors (autoplay policy, etc.)
-        }
-    }
+    // Spacebar handler no longer plays select sound globally
+    // Sound effect now handled in menu selection logic
 });
 
 // ===== ENABLE/DISABLE MUSIC =====

@@ -18,8 +18,8 @@ export default class loading1 extends Phaser.Scene {
         escapeReset(this);
         this.anims.create({
             key: 'clock_anim',
-            frames: this.anims.generateFrameNumbers('clock', { start: 0, end: 11 }),
-            frameRate: 3,
+            frames: this.anims.generateFrameNumbers('clock', { start: 1, end: 11 }),
+            frameRate: 6,
             repeat: 0 // play once
         });
         const sprite = this.add.sprite(window.innerWidth/2, window.innerHeight/2, "clock");
@@ -29,7 +29,7 @@ export default class loading1 extends Phaser.Scene {
         sprite.on('animationcomplete', () => {
             createMenu(this, {
                 options: [
-                    "[ continue to NEXT SEASON ]",
+                    "[ view season 1 stats ]",
                 ],
                 callbacks: [
                     () => {
