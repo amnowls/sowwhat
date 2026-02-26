@@ -14,6 +14,7 @@ export default class loading1 extends Phaser.Scene {
             frameHeight: 110  // height of each frame
         });    }
     create() {
+    this.scene.bringToTop('hud');
         this.cameras.main.setBackgroundColor("#1645f5");
         escapeReset(this);
         this.anims.create({

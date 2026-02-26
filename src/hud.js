@@ -2,8 +2,8 @@
 
 export default class hud extends Phaser.Scene {
     constructor() {
-        super({ key: 'hud', active: false }); 
-
+        super({ key: 'hud', active: false });
+        this.prevValues = {};
     }
     preload(){
          this.load.font(
@@ -11,23 +11,46 @@ export default class hud extends Phaser.Scene {
             'https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/pressstart2p/PressStart2P-Regular.ttf',
             'truetype');
 
+            // this.load.image("hudbackground", "assets/hudbackground.png");
+
     }
     create() {
         this.scene.setVisible(false, 'hud');
         // Store references to text objects so we can update them
         const { width } = this.scale;
-        this.moneyText = this.add.text(20, 20, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#a26f00' });
-        this.corpText = this.add.text(20, 50, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#a26f00' });
-        this.neighborText = this.add.text(20, 80, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#a26f00' });
-        this.soilText = this.add.text(20, 110, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#a26f00' });
+        // this.add.image(150, 80, "hudbackground").setScrollFactor(0).setScale(2.5);
+
+        // this.add.square(width - 200, 20, 180, 120, 0xffffff).setOrigin(0).setScrollFactor(0).setDepth(1);  
+        this.moneyText = this.add.text(20, 20, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#ffffff' });
+        this.corpText = this.add.text(20, 40, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#ffffff' });
+        this.neighborText = this.add.text(20, 60, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#ffffff' });
+        this.soilText = this.add.text(20, 80, '', { fontFamily: 'PressStart2P', fontSize: '13px', fill: '#ffffff' });
         console.log("HUD created");
         // First update
         this.updateStats();
     }
 
+    animateIfChanged(textObj, key, newValue) {
+        if (this.prevValues[key] !== newValue) {
+            this.tweens && this.tweens.add({
+                targets: textObj,
+                scale: 1.3,
+                duration: 100,
+                yoyo: true,
+                ease: 'Quad.easeInOut'
+            });
+            this.prevValues[key] = newValue;
+        }
+    }
+
     updateStats() {
         // Read global state
         const state = this.game.globalState;
+
+        this.animateIfChanged(this.moneyText, 'money', state.money);
+        this.animateIfChanged(this.corpText, 'corporateDependency', state.corporateDependency);
+        this.animateIfChanged(this.neighborText, 'neighborScore', state.neighborScore);
+        this.animateIfChanged(this.soilText, 'soilhealth', state.soilhealth);
 
         this.moneyText.setText('MONEY: ' + state.money);
         this.corpText.setText('CORPORATE DEPENDENCY: ' + state.corporateDependency);

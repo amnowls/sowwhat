@@ -15,6 +15,7 @@ export  {default as scene7 } from "./scene7.js";
 export  {default as scene8 } from "./scene8.js";
 export  {default as scene9 } from "./scene9.js";
 export  {default as scene10 } from "./scene10.js";
+export  {default as season2stats } from "./season2stats.js";
 export  {default as scene11 } from "./scene11.js";
 export  {default as scene12 } from "./scene12.js";
 export  {default as scene13 } from "./scene13.js";

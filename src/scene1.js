@@ -28,6 +28,5 @@ create() {
         }
     );
 }
-    // this.input.keyboard.once("keydown-SPACE", () => this.scene.start("cropchoice"));
-    // this.input.keyboard.once("keydown-ENTER", () => this.scene.start("cropchoice"));
+
 }

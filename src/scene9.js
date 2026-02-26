@@ -51,10 +51,10 @@ export default class scene9 extends Phaser.Scene {
                     window.__globalMoneyAudio.play().catch(() => {});
                 }                   
                 this.scene.get('hud').updateStats();
-                this.scene.start("scene11");
+                this.scene.start("scene10");
             },
                 () => {
-                this.start.scene.start("scene11");
+                this.scene.start("scene10");
             },
             ]
         })

@@ -16,8 +16,8 @@ export default class seedlaw extends Phaser.Scene {
         // this.scene.setVisible(false, 'hud');
         escapeReset(this);
         centerText(this, "SEASON 2", -80, {fontSize: "32px"});
-        const messageText = "RADIO CRACKLES: new law passed!\n\n'" + this.game.globalState.crop + " seeds are now patented by Monsanto. all farmers MUST use certified seeds from corporate suppliers. penalties for planting uncertified seeds include fines and loss of land tenure.'";
-        createTypewriterText(this, messageText, 0, {}, 60,
+        const messageText = "RADIO ANNOUNCEMENT: new law passed!\n\n'" + this.game.globalState.crop + " seeds are now patented by Monsanto. all farmers MUST use certified seeds from corporate suppliers. penalties for planting uncertified seeds include fines and loss of land tenure.'";
+        createTypewriterText(this, messageText, 0, {}, 6,
             () => {
                 createMenu(this, {
             title: "",

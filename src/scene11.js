@@ -10,23 +10,23 @@ export default class scene11 extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-    centerText(this, "");
-    createMenu(this, {
-        // title: "you must choose between illegally planting seeds or trading seeds with your neighbors",
-        options: [
-            "[ A ]",
-            "[ B ]"],
-        callbacks: [
+        centerText(this, "you had a tough season.",0 , {fontSize: "32px"});
+        createMenu(this, {
+            options: [
+                "[ sell harvest at market ]"],
+            callbacks: [
                 () => {
-                this.game.globalState.criminalRecord = "outlawed farmer";
-                this.scene.start("scene1");
-            },
-                () => {
-                this.game.globalState.neighborScore += 1;
-                this.scene.start("scene1");
-            },
+            if (this.game.globalState.certified == true && this.game.globalState.crop == "corn") {
+                this.game.globalState.money += 20;
+            } else if (this.game.globalState.certified == false && this.game.globalState.crop == "corn") {
+                this.game.globalState.money += 15;
+            }  else if (this.game.globalState.crop != "corn") {
+                this.game.globalState.money += 10;
+            }
+            this.scene.get('hud').updateStats();
+            this.scene.start("season2stats");
+                }
             ]
-        }
-        );
-    }
-}
+        })}}
+
+

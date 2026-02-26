@@ -10,23 +10,17 @@ export default class scene12 extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-    centerText(this, "");
-    createMenu(this, {
-        // title: "you must choose between illegally planting seeds or trading seeds with your neighbors",
-        options: [
-            "[ A ]",
-            "[ B ]"],
-        callbacks: [
+        centerText(this, "SEASON 3", -80, {fontSize: "32px"});
+        const messageText = "RADIO ANNOUNCEMENT: new law passed!\n\n'" + this.game.globalState.crop + " seeds are now patented by Monsanto. all farmers MUST use certified seeds from corporate suppliers. penalties for planting uncertified seeds include fines and loss of land tenure.'";
+        createTypewriterText(this, messageText, 0, {}, 6,
+            () => {
+                createMenu(this, {
+            title: "",
+            options: [
+                "[ continue ]"],
+            callbacks: [
                 () => {
-                this.game.globalState.criminalRecord = "outlawed farmer";
-                this.scene.start("scene1");
-            },
-                () => {
-                this.game.globalState.neighborScore += 1;
-                this.scene.start("scene1");
-            },
+                    this.scene.start("certify");
+                }
             ]
-        }
-        );
-    }
-}
+        })});}}
