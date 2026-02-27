@@ -30,15 +30,27 @@ export default class scene14 extends Phaser.Scene {
             });
         });
     } else if (this.game.globalState.certified == true && this.game.globalState.fines > 0) {
-        createTypewriterText(this, "\n\nseed inspector: \"looks like you've breached your seed contract. you owe $" + this.game.globalState.fines + " in fines\"",
+        createTypewriterText(this, "\n\nseed inspector: \"looks like you've breached your seed contract. you owe $" + this.game.globalState.fines + " in fines. HOWEVER, we can offer an incentive and waive your fines if you report any farmers who are illegally farming uncertified seeds.\"",
             0, {fontSize: "24px", fill: "#000000"}, 6, () => {
                 createMenu(this, {
                     title: [""],
                     options: [
                         "[ pay fines -$" + this.game.globalState.fines + " ]",
+                        "[ report neighbors to waive fines ]"
                     ],
                     callbacks: [
                         () => {
+                            this.game.globalState.money -= this.game.globalState.fines;
+                            this.game.globalState.fines = 0;
+
+                            this.scene.get('hud').updateStats();
+                            this.scene.start("scene15");
+                        },
+                        () => {
+                            this.game.globalState.fines = 0;
+                            this.game.globalState.neighborScore -= 3;
+
+                            this.scene.get('hud').updateStats();
                             this.scene.start("scene15");
                         }
                     ],

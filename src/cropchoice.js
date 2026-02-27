@@ -9,10 +9,10 @@ export default class cropchoice extends Phaser.Scene {
     }
 
     preload(){
-        this.load.spritesheet('cassava', 'assets/crops/cassava.png', {
-            frameWidth: 60,  // width of each frame
-            frameHeight: 48  // height of each frame
-        });
+        // this.load.spritesheet('cassava', 'assets/crops/cassava.png', {
+        //     frameWidth: 60,  // width of each frame
+        //     frameHeight: 48  // height of each frame
+        // });
         this.load.spritesheet('cowpea', 'assets/crops/cowpea.png', {
             frameWidth: 60,  // width of each frame
             frameHeight: 39  // height of each frame
@@ -30,12 +30,12 @@ export default class cropchoice extends Phaser.Scene {
         // this.scene.setVisible(true, 'hud');
         escapeReset(this);
         centerText(this, "use joystick and button to make selections", +60);
-        this.anims.create({
-            key: 'cassava_anim',
-            frames: this.anims.generateFrameNumbers('cassava', { start: 0, end: 4 }),
-            frameRate: 5,
-            repeat: -1
-        });
+        // this.anims.create({
+        //     key: 'cassava_anim',
+        //     frames: this.anims.generateFrameNumbers('cassava', { start: 0, end: 4 }),
+        //     frameRate: 5,
+        //     repeat: -1
+        // });
 
         this.anims.create({
             key: 'cowpea_anim',
@@ -50,7 +50,7 @@ export default class cropchoice extends Phaser.Scene {
             frameRate: 5,
             repeat: -1
         });
-        const crops = ['cassava', 'cowpea', 'corn'];
+        const crops = ['cowpea', 'corn'];
 
         const w = this.scale.width;
         const h = this.scale.height;
@@ -68,18 +68,18 @@ export default class cropchoice extends Phaser.Scene {
       createMenu(this, {
             title: "what type of crop would you like to plant?",
             options: [
-                "[ cassava ]",
+                // "[ cassava ]",
                 "[ cowpea ]",
-                "[ maize ]"
+                "[ corn ]"
             ],
             callbacks: [
                 //cassava
-                () => {
-                    this.game.globalState.neighborScore += 1;
-                    this.game.globalState.crop = "cassava";
-                    this.scene.get('hud').updateStats();
-                    this.scene.start("scene3");
-                },
+                // () => {
+                //     this.game.globalState.neighborScore += 1;
+                //     this.game.globalState.crop = "cassava";
+                //     this.scene.get('hud').updateStats();
+                //     this.scene.start("scene3");
+                // },
 
                 //cowpea
                 () => {
@@ -93,7 +93,7 @@ export default class cropchoice extends Phaser.Scene {
                 () => {
                     this.game.globalState.corporateDependency += 1;
                     this.game.globalState.neighborScore -= 1;
-                    this.game.globalState.crop = "maize";
+                    this.game.globalState.crop = "corn";
                     this.scene.get('hud').updateStats();
                     this.scene.start("scene3");
                 }
