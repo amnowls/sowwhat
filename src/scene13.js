@@ -12,18 +12,13 @@ export default class scene13 extends Phaser.Scene {
     escapeReset(this);
     centerText(this, "");
     createMenu(this, {
-        // title: "you must choose between illegally planting seeds or trading seeds with your neighbors",
+        title: "PLANT SEEDS MINI GAME",
         options: [
-            "[ A ]",
-            "[ B ]"],
+            "[ plant ]",
+        ],
         callbacks: [
                 () => {
-                this.game.globalState.criminalRecord = "outlawed farmer";
-                this.scene.start("scene1");
-            },
-                () => {
-                this.game.globalState.neighborScore += 1;
-                this.scene.start("scene1");
+                this.scene.start("scene14");
             },
             ]
         }

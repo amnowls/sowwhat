@@ -10,8 +10,8 @@ export default class scene11 extends Phaser.Scene {
 
     create() {
     escapeReset(this);
-        centerText(this, "you had a tough season.",0 , {fontSize: "32px"});
         createMenu(this, {
+            title: ["you harvest your crops and prepare to sell them at the market."],
             options: [
                 "[ sell harvest at market ]"],
             callbacks: [

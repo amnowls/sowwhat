@@ -38,6 +38,7 @@ const globalState = {
     crop: "",
     fines: 0,
     pesticides: false,
+    biodiversity: 5,
     soilhealthStates: ["deteriorated", "poor", "fair", "good", "excellent"],
     soilhealthIndex: 3, // 0: deteriorated, 1: poor, 2: fair, 3: good, 4: excellent
     get soilhealth() {
@@ -56,6 +57,7 @@ const globalState = {
         this.criminalRecord = "perfect citizen";
         this.fines = 0;
         this.pesticides = false;
+        this.biodiversity = 5;
         this.soilhealthIndex = 3;
     }
 };
