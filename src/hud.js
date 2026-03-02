@@ -39,6 +39,17 @@ export default class hud extends Phaser.Scene {
                 yoyo: true,
                 ease: 'Quad.easeInOut'
             });
+            if (key === 'money') {
+                try {
+                    if (this.sound && typeof this.sound.play === 'function' &&
+                        this.cache && this.cache.audio && typeof this.cache.audio.exists === 'function' &&
+                        this.cache.audio.exists('money')) {
+                        this.sound.play('money');
+                    } else if (window && window.__globalMoneyAudio) {
+                        try { window.__globalMoneyAudio.currentTime = 0; window.__globalMoneyAudio.play().catch(()=>{}); } catch(e){}
+                    }
+                } catch (e) { console.warn('Failed to play money sound', e); }
+            }
             this.prevValues[key] = newValue;
         }
     }

@@ -15,7 +15,7 @@ export function createMenu(scene, {
 }) {
 
     // --- Draw Title ---
-    centerText(scene, title, -30);
+    centerText(scene, title, -30, { fill: highlightColor });
 
     // --- Build menu option texts ---
     const optionObjects = options.map((text, i) => {

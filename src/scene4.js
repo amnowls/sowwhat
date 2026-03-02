@@ -22,12 +22,7 @@ export default class scene4 extends Phaser.Scene {
                 "[ sell harvest ]",
             ],
             callbacks: [
-                () => {
-                //money sound effecr
-                if (window.__globalMoneyAudio) {
-                    window.__globalMoneyAudio.currentTime = 0;
-                    window.__globalMoneyAudio.play().catch(() => {});
-                }               
+                () => {           
                 this.scene.start("loading1");
                 }
             ]

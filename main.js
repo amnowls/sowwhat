@@ -7,7 +7,7 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15} from "./src/SCENES.js";
+import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19} from "./src/SCENES.js";
 import musicscene from "./src/musicscene.js";
 
 var config = {
@@ -15,7 +15,7 @@ var config = {
     backgroundColor: "#ffb000",
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, hud, loading1, scene1,cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15],
+    scene: [titlescene, hud, loading1, scene1,cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
@@ -33,7 +33,7 @@ const globalState = {
     money: 100,
     corporateDependency: 0,
     neighborScore: 5,
-    criminalRecord: "perfect citizen",
+    criminality: 0,
     certified: false,
     crop: "",
     fines: 0,
@@ -54,7 +54,7 @@ const globalState = {
         this.money = 100;
         this.crop = "";
         this.certified = false;
-        this.criminalRecord = "perfect citizen";
+        this.criminality = 0;
         this.fines = 0;
         this.pesticides = false;
         this.biodiversity = 5;
@@ -79,7 +79,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 // ===== ENABLE/DISABLE MUSIC =====
-const ENABLE_MUSIC = true;  // Set to true to enable background music
+const ENABLE_MUSIC = false;  // Set to true to enable background music
 // ================================
 
 if (ENABLE_MUSIC) {

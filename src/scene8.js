@@ -18,12 +18,12 @@ if (this.game.globalState.certified == false) {
             "[ trade seeds with neighbors ]"],
         callbacks: [
                 () => {
-                this.game.globalState.criminalRecord = "outlawed farmer";
+                this.game.globalState.criminality += 1;
                 this.scene.get('hud').updateStats();
                 this.scene.start("scene9");
             },
                 () => {
-                this.game.globalState.neighborScore += 1;
+                this.game.globalState.neighborScore -= 1;
                 this.scene.get('hud').updateStats();
                 this.scene.start("scene9");
             },
@@ -33,12 +33,13 @@ if (this.game.globalState.certified == false) {
     }
     else {
             createMenu(this, {
-        title: "the next planting season begins. you may legally plant your seeds as they have been certified.",
+        title: "the next planting season begins. as per your contract, you must buy a new batch of certified seeds from the seed company to plant this season.",
         options: [
-            "[ plant seeds ]"],
+            "[ purchase and plant seeds -$10 ]"],
         callbacks: [
                 () => {
-                this.game.globalState.criminalRecord = "outlawed farmer";
+                this.game.globalState.criminality += 2;
+                this.game.globalState.money -= 10;
                 this.scene.get('hud').updateStats();
                 this.scene.start("scene9");
             }

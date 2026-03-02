@@ -21,3 +21,8 @@ export  {default as scene12 } from "./scene12.js";
 export  {default as scene13 } from "./scene13.js";
 export  {default as scene14 } from "./scene14.js";
 export  {default as scene15  } from "./scene15.js";
+export {default as season3stats  } from "./season3stats.js";
+export {default as scene16  } from "./scene16.js"; 
+export {default as scene17  } from "./scene17.js";
+export {default as scene18  } from "./scene18.js";
+export { default as scene19  } from "./scene19.js";

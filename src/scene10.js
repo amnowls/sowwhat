@@ -18,7 +18,7 @@ export default class scene10 extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#1645f5");
     escapeReset(this);
     centerText(this, "waiting for crops to grow...", -140, {fill: "#000000"});
-    const weather = Math.random() < 0.5 ? "moderate flooding" : "mild drought conditions.";
+    const weather = Math.random() < 0.5 ? "MODERATE RAINSTORMS" : "MILD DROUGHT CONDITIONS";
     createTypewriterText(
         this,
         `\n\nlocal weather forecast: ${weather}. take precautions and stay safe out there folks!`, +70, {fill: "#ffb000"}, 6);
