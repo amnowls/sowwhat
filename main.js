@@ -7,18 +7,29 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19} from "./src/SCENES.js";
+import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19, slots, planttiming, runjump} from "./src/SCENES.js";
 import musicscene from "./src/musicscene.js";
+
+// Set this to a scene key (example: "planttiming") to jump directly there during development.
+// Leave as null to keep normal startup flow.
+const DEBUG_START_SCENE = "runjump"; // or "season1stats", "scene3", etc. for testing specific scenes
 
 var config = {
     type: Phaser.AUTO,
     backgroundColor: "#ffb000",
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [titlescene, hud, loading1, scene1,cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19],
+    scene: [hud, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19, planttiming, slots, titlescene, runjump],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
     },
     input: {
         keyboard: true,
@@ -79,7 +90,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 // ===== ENABLE/DISABLE MUSIC =====
-const ENABLE_MUSIC = false;  // Set to true to enable background music
+const ENABLE_MUSIC = true;  // Set to true to enable background music
 // ================================
 
 if (ENABLE_MUSIC) {
@@ -88,4 +99,10 @@ if (ENABLE_MUSIC) {
 }
 
 game.scene.start('hud');
+
+if (DEBUG_START_SCENE) {
+    game.scene.start(DEBUG_START_SCENE);
+} else {
+    game.scene.start('titlescene');
+}
 

@@ -7,6 +7,7 @@ export default class scene10 extends Phaser.Scene {
     constructor() {
         super("scene10");
     }
+    
     preload() {
         // Load assets for the next scene here
         this.load.spritesheet('clock', 'assets/clock.png', {

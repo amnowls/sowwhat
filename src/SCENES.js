@@ -26,3 +26,6 @@ export {default as scene16  } from "./scene16.js";
 export {default as scene17  } from "./scene17.js";
 export {default as scene18  } from "./scene18.js";
 export { default as scene19  } from "./scene19.js";
+export { default as planttiming } from "./planttiming.js";
+export { default as slots } from "./slots.js";
+export { default as runjump } from "./runjump.js";  
