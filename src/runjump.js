@@ -135,7 +135,7 @@ export default class runjump extends Phaser.Scene {
         if (!this.gameIsOver && this.time.now - this.lastSpawnTime >= this.spawnInterval) {
             this.spawnObstacle();
             this.lastSpawnTime = this.time.now;
-            this.spawnInterval = Phaser.Math.Between(700, 1200);
+            this.spawnInterval = Phaser.Math.Between(500, 1200);
         }
 
         this.autoJumpInspector();
@@ -162,14 +162,14 @@ export default class runjump extends Phaser.Scene {
         this.obstacles.add(obstacle);
         obstacle.body.setSize(obstacle.width, obstacle.height);
         if (elapsed >= 33) {
-            obstacle.body.setVelocityX(-450);
+            obstacle.body.setVelocityX(-500);
         } else if (elapsed >= 28) {
-            obstacle.body.setVelocityX(-405);
+            obstacle.body.setVelocityX(-430);
         } else if (elapsed >= 20) {
-            obstacle.body.setVelocityX(-370);
+            obstacle.body.setVelocityX(-395);
         } else 
             if (elapsed >= 13) {
-            obstacle.body.setVelocityX(-335);
+            obstacle.body.setVelocityX(-355);
         } else {
             obstacle.body.setVelocityX(-300);
         }

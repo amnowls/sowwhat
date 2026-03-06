@@ -20,12 +20,12 @@ if (this.game.globalState.certified == false) {
                 () => {
                 this.game.globalState.criminality += 1;
                 this.scene.get('hud').updateStats();
-                this.scene.start("scene9");
+                this.scene.start("planttiming");
             },
                 () => {
                 this.game.globalState.neighborScore -= 1;
                 this.scene.get('hud').updateStats();
-                this.scene.start("scene9");
+                this.scene.start("slots");
             },
             ]
         }
@@ -41,7 +41,7 @@ if (this.game.globalState.certified == false) {
                 this.game.globalState.criminality += 2;
                 this.game.globalState.money -= 10;
                 this.scene.get('hud').updateStats();
-                this.scene.start("scene9");
+                this.scene.start("planttiming");
             }
             ]
         }

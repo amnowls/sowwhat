@@ -30,7 +30,7 @@ export default class planttiming extends Phaser.Scene {
         this.hitsNeeded = 3;
         this.hits = 0;
         this.attempts = 0;
-        this.roundTimeMs = 5000;
+        this.roundTimeMs = 7000;
         this.timeRemainingMs = this.roundTimeMs;
         this.roundOver = false;
 
@@ -39,7 +39,7 @@ export default class planttiming extends Phaser.Scene {
         this.barX = (this.scale.width - this.barWidth) / 2;
         this.barY = this.scale.height * 0.52;
 
-        this.sweetSpotWidth = this.barWidth * 0.2;
+        this.sweetSpotWidth = this.barWidth * 0.17;
         this.sweetSpotX = this.randomSweetSpotX();
 
         this.markerX = this.barX;
