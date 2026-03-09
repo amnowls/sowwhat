@@ -19,7 +19,7 @@ export default class scene3 extends Phaser.Scene {
                 ],
             callbacks: [
                 () => {
-                    this.scene.start("scene4");
+                    this.scene.start("planttiming", { nextScene: "loading1", sourceScene: "scene3" });
                 }
             ]
         }

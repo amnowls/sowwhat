@@ -38,7 +38,7 @@ export default class scene14 extends Phaser.Scene {
                         options: [
                             "[ pay fines -$" + this.game.globalState.fines + " ]",
                             "[ report neighbors to waive fines ]",
-                            "[ refuse to pay or report ]"
+                            "[ run away ]"
                         ],
                         callbacks: [
                             () => {
@@ -60,7 +60,7 @@ export default class scene14 extends Phaser.Scene {
                                 this.game.globalState.neighborScore += 1;
 
                                 this.scene.get('hud').updateStats();
-                                this.scene.start("scene15");
+                                this.scene.start("runjump");
                             }
 
                         ],
@@ -75,7 +75,7 @@ export default class scene14 extends Phaser.Scene {
                         title: [""],
                         options: [
                             "[ pay bail -$50 ]",
-                            "[ refuse to pay bail and slam door ]"
+                            "[ run away ]"
                         ],
                         callbacks: [
                             () => {
@@ -86,7 +86,7 @@ export default class scene14 extends Phaser.Scene {
                             () => {
                                 this.game.globalState.criminality += 2;
                                 this.scene.get('hud').updateStats();
-                                this.scene.start("scene15");
+                                this.scene.start("runjump");
                             }
                         ],
                         fontColor: "#ffffff", // normal option color (white)

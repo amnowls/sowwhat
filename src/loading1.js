@@ -29,6 +29,7 @@ export default class loading1 extends Phaser.Scene {
 
         sprite.on('animationcomplete', () => {
             createMenu(this, {
+                title: "your harvest is ready. click to view your yield.",
                 options: [
                     "[ view season 1 stats ]",
                 ],

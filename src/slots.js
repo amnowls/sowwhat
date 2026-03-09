@@ -8,6 +8,10 @@ export default class slots extends Phaser.Scene {
         super("slots");
     }
 
+    init(data) {
+        this.nextScene = data?.nextScene || "titlescene";
+        this.sourceScene = data?.sourceScene || null;
+    }
 
     preload() {
         this.load.font(
@@ -17,6 +21,7 @@ export default class slots extends Phaser.Scene {
 
         // this.load.image("hudbackground", "assets/hudbackground.png");
     }
+
     create() {
         escapeReset(this);
         this.cameras.main.setBackgroundColor("#ed3833");
@@ -41,7 +46,7 @@ export default class slots extends Phaser.Scene {
 
         const symbols = ['1', '2', '3', '4', '5', '6'];
 
-        centerText(this, "SLOT MACHINE", -170, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
+        centerText(this, "SPIN TO WIN\nNEIGHBOUR'S SEEDS!", -170, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
 
 
         // Create slot backgrounds
@@ -79,11 +84,11 @@ export default class slots extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
 
 
-        centerText(this, "press [ SPACE ] to spin", 105, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "14px", align: "center" });
+        centerText(this, "higher community scores offer higher chances\npress [ SPACE ] to spin", 105, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "14px", align: "center" });
 
         // Result text
-        this.resultText = this.add.text(window.innerWidth / 2, window.innerHeight / 2 + 200, '', {
-            fontSize: '36px',
+        this.resultText = this.add.text(window.innerWidth / 2, window.innerHeight / 2 + 180, '', {
+            fontSize: '18px',
             fontFamily: '"Press Start 2P"',
             color: '#ffeb3b'
         }).setOrigin(0.5);
@@ -136,15 +141,13 @@ export default class slots extends Phaser.Scene {
         const symbol2 = this.slot2.text;
         const symbol3 = this.slot3.text;
 
-        let result = "MISS";
         if (symbol1 === symbol2 && symbol2 === symbol3) {
-            result == "JACKPOT!";
-            // this.resultText.setColor('#0022ff');
+            this.resultText.setText("HIT! - your neighbors ACCEPTED the trade");
+            this.resultText.setColor("#33ff00");
         } else {
-            result == "MISS";
-            // this.resultText.setColor('#ff6b6b');
+            this.resultText.setText("MISS - your neighbours REFUSED the trade");
+            this.resultText.setColor("#ed3833");
         }
-        centerText(this, result, 165, { fill: "#ffffff", fontSize: "20px", align: "center" });
 
         // Reset button
         this.spinButton.setFillStyle(0xffffff, 0);
@@ -152,17 +155,17 @@ export default class slots extends Phaser.Scene {
 
         createMenu(this, {
             title: [""],
-            options: ["[ retry mini game ]", "[ back to title ]"],
+            options: ["[ continue ]"],
             callbacks: [
-            () => this.scene.restart(),
-            () => this.scene.start("titlescene")
-        ],
+                () => this.scene.start(this.nextScene),
+
+            ],
             startY: 240,
             gap: 36,
             fontColor: "#ffffff",
             highlightColor: "#1645f5"
-});
-}
+        });
+    }
 
 
 

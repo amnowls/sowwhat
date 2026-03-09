@@ -119,6 +119,9 @@ export default class scene18 extends Phaser.Scene {
                                     this.game.globalState.money -= 20;
                                     this.scene.get('hud').updateStats();
                                     this.scene.start("scene19");
+                                },
+                                () => {
+                                    this.scene.start("scene19");
                                 }
                             ],
                             fontColor: "#ffffff", // normal option color (white)

@@ -20,6 +20,7 @@ export default class runjump extends Phaser.Scene {
 
     create() {
         escapeReset(this);
+        this.game.ENABLE_MUSIC == false;
 
         this.cameras.main.setBackgroundColor("#ed3833");
 
@@ -106,152 +107,158 @@ export default class runjump extends Phaser.Scene {
         const jumpPressed = this.cursors.space.isDown || this.wKey.isDown || this.cursors.up.isDown;
 
         // Start jump if key pressed, farmer grounded, and not already jumping
+
         if (this.farmer && this.farmer.body && jumpPressed && this.farmer.body.touching.down && !this.isJumping) {
-            this.jumpKeyPressTime = this.time.now;
-            this.isJumping = true;
-            console.log("Jump started!");
-        }
+        this.farmer.body.setVelocityY(-700);
+        this.isJumping = true;
+        console.log("Jumped!");
+    }
+    // if (this.farmer && this.farmer.body && jumpPressed && this.farmer.body.touching.down && !this.isJumping) {
+    //     this.jumpKeyPressTime = this.time.now;
+    //     this.isJumping = true;
+    //     console.log("Jump started!");
+    // }
 
-        // Apply upward impulse while key is held and within 1 second
-        if (this.farmer && this.farmer.body && jumpPressed && this.isJumping) {
-            const holdDuration = this.time.now - this.jumpKeyPressTime;
-            if (holdDuration <= 150) {
-                // Apply upward impulse each frame (constant velocity while held)
-                this.farmer.body.velocity.y = -500;
-            } else {
-                this.isJumping = false;
-            }
-        } else if (this.isJumping && !jumpPressed) {
-            // Stop jumping when key is released
-            this.isJumping = false;
-        }
+    // // Apply upward impulse while key is held and within 1 second
+    // if (this.farmer && this.farmer.body && jumpPressed && this.isJumping) {
+    //     const holdDuration = this.time.now - this.jumpKeyPressTime;
+    //     if (holdDuration <= 150) {
+    //         // Apply upward impulse each frame (constant velocity while held)
+    //         this.farmer.body.velocity.y = -500;
+    //     } else {
+    //         this.isJumping = false;
+    //     }
+    // } else if (this.isJumping && !jumpPressed) {
+    //     // Stop jumping when key is released
+    //     this.isJumping = false;
+    // }
 
-        // Reset jump state when farmer touches ground
-        if (this.farmer && this.farmer.body && this.farmer.body.touching.down && !jumpPressed) {
-            this.isJumping = false;
-        }
+    // Reset jump state when farmer touches ground
+    if(this.farmer && this.farmer.body && this.farmer.body.touching.down && !jumpPressed) {
+    this.isJumping = false;
+}
 
-        // Spawn obstacles at intervals
-        if (!this.gameIsOver && this.time.now - this.lastSpawnTime >= this.spawnInterval) {
-            this.spawnObstacle();
-            this.lastSpawnTime = this.time.now;
-            this.spawnInterval = Phaser.Math.Between(500, 1200);
-        }
+// Spawn obstacles at intervals
+if (!this.gameIsOver && this.time.now - this.lastSpawnTime >= this.spawnInterval) {
+    this.spawnObstacle();
+    this.lastSpawnTime = this.time.now;
+    this.spawnInterval = Phaser.Math.Between(500, 1200);
+}
 
-        this.autoJumpInspector();
+this.autoJumpInspector();
 
-        this.obstacles.children.iterate(obstacle => {
-            if (obstacle && obstacle.x < this.frameX + 40) {
-                obstacle.destroy();
-            }
-        });
+this.obstacles.children.iterate(obstacle => {
+    if (obstacle && obstacle.x < this.frameX + 40) {
+        obstacle.destroy();
+    }
+});
 
-        const elapsed = (this.time.now - this.startTime) / 1000;
-        if (!this.gameIsOver && elapsed >= 40) {
-            this.winGame();
-        }
+const elapsed = (this.time.now - this.startTime) / 1000;
+if (!this.gameIsOver && elapsed >= 40) {
+    this.winGame();
+}
 
     }
 
-    spawnObstacle() {
-        const elapsed = (this.time.now - this.startTime) / 1000;
-        const spawnX = this.frameX + this.frameWidth - 25;
-        const spawnY = this.ground.y - this.ground.height / 2 - 10;
-        const obstacle = this.add.image(spawnX, spawnY, "rock");
-        this.physics.add.existing(obstacle);
-        this.obstacles.add(obstacle);
-        obstacle.body.setSize(obstacle.width, obstacle.height);
-        if (elapsed >= 33) {
-            obstacle.body.setVelocityX(-500);
-        } else if (elapsed >= 28) {
-            obstacle.body.setVelocityX(-430);
-        } else if (elapsed >= 20) {
-            obstacle.body.setVelocityX(-395);
-        } else 
-            if (elapsed >= 13) {
+spawnObstacle() {
+    const elapsed = (this.time.now - this.startTime) / 1000;
+    const spawnX = this.frameX + this.frameWidth - 25;
+    const spawnY = this.ground.y - this.ground.height / 2 - 10;
+    const obstacle = this.add.image(spawnX, spawnY, "rock");
+    this.physics.add.existing(obstacle);
+    this.obstacles.add(obstacle);
+    obstacle.body.setSize(obstacle.width, obstacle.height);
+    if (elapsed >= 33) {
+        obstacle.body.setVelocityX(-500);
+    } else if (elapsed >= 28) {
+        obstacle.body.setVelocityX(-430);
+    } else if (elapsed >= 20) {
+        obstacle.body.setVelocityX(-395);
+    } else
+        if (elapsed >= 13) {
             obstacle.body.setVelocityX(-355);
         } else {
             obstacle.body.setVelocityX(-300);
         }
-        obstacle.body.setImmovable(true);
-        obstacle.body.setAllowGravity(false);
+    obstacle.body.setImmovable(true);
+    obstacle.body.setAllowGravity(false);
 
+}
+
+autoJumpInspector() {
+    if (!this.inspector || !this.inspector.body) {
+        return;
     }
 
-    autoJumpInspector() {
-        if (!this.inspector || !this.inspector.body) {
+    const now = this.time.now;
+    if (now - this.inspectorLastJumpTime < this.inspectorJumpCooldownMs) {
+        return;
+    }
+
+    const isGrounded = this.inspector.body.touching.down || this.inspector.body.blocked.down;
+    if (!isGrounded) {
+        return;
+    }
+
+    let closestObstacle = null;
+    let closestDistance = Number.POSITIVE_INFINITY;
+
+    this.obstacles.children.iterate((obstacle) => {
+        if (!obstacle || !obstacle.active || !obstacle.body) {
             return;
         }
 
-        const now = this.time.now;
-        if (now - this.inspectorLastJumpTime < this.inspectorJumpCooldownMs) {
-            return;
+        const distanceAhead = obstacle.x - this.inspector.x;
+        if (distanceAhead > 0 && distanceAhead < closestDistance) {
+            closestObstacle = obstacle;
+            closestDistance = distanceAhead;
         }
+    });
 
-        const isGrounded = this.inspector.body.touching.down || this.inspector.body.blocked.down;
-        if (!isGrounded) {
-            return;
-        }
-
-        let closestObstacle = null;
-        let closestDistance = Number.POSITIVE_INFINITY;
-
-        this.obstacles.children.iterate((obstacle) => {
-            if (!obstacle || !obstacle.active || !obstacle.body) {
-                return;
-            }
-
-            const distanceAhead = obstacle.x - this.inspector.x;
-            if (distanceAhead > 0 && distanceAhead < closestDistance) {
-                closestObstacle = obstacle;
-                closestDistance = distanceAhead;
-            }
-        });
-
-        if (!closestObstacle) {
-            return;
-        }
-
-        const obstacleHalfWidth = (closestObstacle.displayWidth || closestObstacle.width || 0) / 2;
-        const triggerDistance = this.inspectorJumpTriggerDistance + obstacleHalfWidth;
-
-        if (closestDistance <= triggerDistance) {
-            this.inspector.body.setVelocityY(this.inspectorJumpVelocity);
-            this.inspectorLastJumpTime = now;
-        }
+    if (!closestObstacle) {
+        return;
     }
 
+    const obstacleHalfWidth = (closestObstacle.displayWidth || closestObstacle.width || 0) / 2;
+    const triggerDistance = this.inspectorJumpTriggerDistance + obstacleHalfWidth;
 
-
-    endGame(message, textColor) {
-        this.gameIsOver = true;
-        this.physics.pause();
-        this.farmer.destroy();
-        this.inspector.destroy();
-        this.obstacles.clear(true, true);
-        centerText(this, message, 0, { fill: textColor, fontSize: "20px", align: "center" });
-
-        createMenu(this, {
-            title: [""],
-            options: ["[ retry mini game ]", "[ back to title ]"],
-            callbacks: [
-                () => this.scene.restart(),
-                () => this.scene.start("titlescene")
-            ],
-            startY: 240,
-            gap: 36,
-            fontColor: "#ffffff",
-            highlightColor: "#1645f5"
-        });
+    if (closestDistance <= triggerDistance) {
+        this.inspector.body.setVelocityY(this.inspectorJumpVelocity);
+        this.inspectorLastJumpTime = now;
     }
+}
 
-    gameOver() {
-        console.log("Caught by the seed inspector!");
-        this.endGame("you've been caught!", "#ed3833");
-    }
 
-    winGame() {
-        console.log("You escaped!");
-        this.endGame("you've escaped!", "#33ff00");
-    }
+
+endGame(message, textColor) {
+    this.gameIsOver = true;
+    this.physics.pause();
+    this.farmer.destroy();
+    this.inspector.destroy();
+    this.obstacles.clear(true, true);
+    centerText(this, message, 0, { fill: textColor, fontSize: "20px", align: "center" });
+
+    createMenu(this, {
+        title: [""],
+        options: ["[ retry mini game ]", "[ back to title ]"],
+        callbacks: [
+            () => this.scene.restart(),
+            () => this.scene.start("titlescene")
+        ],
+        startY: 240,
+        gap: 36,
+        fontColor: "#ffffff",
+        highlightColor: "#1645f5"
+    });
+}
+
+gameOver() {
+    console.log("Caught by the seed inspector!");
+    this.endGame("you've been caught!", "#ed3833");
+}
+
+winGame() {
+    console.log("You escaped!");
+    this.endGame("you've escaped!", "#33ff00");
+}
 }

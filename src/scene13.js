@@ -14,33 +14,31 @@ export default class scene13 extends Phaser.Scene {
         if (this.game.globalState.certified == true) {
 
             createMenu(this, {
-                title: "PLANT SEEDS MINI GAME",
+                title: "its time to plant your seeds for the season.",
                 options: [
-                    "[ purchase and plant seeds ]",
+                    "[ purchase and plant seeds -$10]",
                 ],
                 callbacks: [
                     () => {
-                        this.game.globalState.money -= 10;
                         this.scene.get('hud').updateStats();
-                        this.scene.start("scene14");
+                        this.scene.start("slots", { nextScene: "scene14", sourceScene: "scene13" });
                     }
                 ]
             });
 
         } else {
             createMenu(this, {
-                title: "PLANT SEEDS MINI GAME",
+                title: "its time to plant your seeds for the season.",
                 options: [
                     "[ plant uncertified seeds ]",
                 ],
                 callbacks: [
                     () => {
-                        this.game.globalState.criminality += 1;
                         this.scene.get('hud').updateStats();
-                        this.scene.start("scene14");
+                        this.scene.start("slots", { nextScene: "scene14", sourceScene: "scene13" });
                     }]
             },);
 
+        }
     }
-}
 }

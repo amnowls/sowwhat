@@ -12,7 +12,7 @@ export default class season3stats extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor("#1645f5");
 
-    centerText(this, "SEASON 3 HAS ENDED.", -80, {fill: "#ffb000", fontSize: "30px", fontFamily: 'PressStart2P', align: "center"},);
+    centerText(this, "SEASON 3 STATS.", -80, {fill: "#ffb000", fontSize: "30px", fontFamily: 'PressStart2P', align: "center"},);
     createTypewriterText(
         this,
         "\n\nPOOR HARVEST.\nsoilhealth: " + this.game.globalState.soilhealth + "\nneighbor score: " + this.game.globalState.neighborScore,

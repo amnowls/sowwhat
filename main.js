@@ -12,7 +12,7 @@ import musicscene from "./src/musicscene.js";
 
 // Set this to a scene key (example: "planttiming") to jump directly there during development.
 // Leave as null to keep normal startup flow.
-const DEBUG_START_SCENE = "titlescene"; // or "season1stats", "scene3", etc. for testing specific scenes
+const DEBUG_START_SCENE = "scene14"; // or "season1stats", "scene3", etc. for testing specific scenes
 
 var config = {
     type: Phaser.AUTO,
@@ -50,6 +50,9 @@ const globalState = {
     fines: 0,
     pesticides: false,
     biodiversity: 5,
+    planting: 0,
+    yield: 0,
+    season: 1,
     soilhealthStates: ["deteriorated", "poor", "fair", "good", "excellent"],
     soilhealthIndex: 3, // 0: deteriorated, 1: poor, 2: fair, 3: good, 4: excellent
     get soilhealth() {
@@ -68,6 +71,9 @@ const globalState = {
         this.criminality = 0;
         this.fines = 0;
         this.pesticides = false;
+        this.planting = 0;
+        this.yield = 0;
+        this.season = 1;
         this.biodiversity = 5;
         this.soilhealthIndex = 3;
     }
@@ -75,6 +81,35 @@ const globalState = {
 
 var game = new Phaser.Game(config);
 game.globalState = globalState;
+
+const LOG_GLOBALSTATE_ON_SCENE_CHANGE = true;
+
+if (LOG_GLOBALSTATE_ON_SCENE_CHANGE) {
+    const snapshotGlobalState = () => JSON.parse(JSON.stringify(game.globalState));
+
+    const logStateAfterTransition = (methodName, sceneKey, data) => {
+        const stateSnapshot = snapshotGlobalState();
+        console.groupCollapsed(`[Scene ${methodName}] -> ${sceneKey}`);
+        console.log("scene data:", data ?? null);
+        console.table(stateSnapshot);
+        console.groupEnd();
+    };
+
+    const originalStart = game.scene.start;
+    game.scene.start = function (key, data) {
+        const result = originalStart.call(this, key, data);
+        logStateAfterTransition("start", key, data);
+        return result;
+    };
+
+    const originalRestart = game.scene.restart;
+    game.scene.restart = function (data) {
+        const targetKey = this.scene && this.scene.key ? this.scene.key : "(current scene)";
+        const result = originalRestart.call(this, data);
+        logStateAfterTransition("restart", targetKey, data);
+        return result;
+    };
+}
 
 // Create lightweight global HTML5 Audio objects for select and move sounds
 // so any scene can trigger them regardless of Phaser preload order.
