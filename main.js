@@ -12,7 +12,7 @@ import musicscene from "./src/musicscene.js";
 
 // Set this to a scene key (example: "planttiming") to jump directly there during development.
 // Leave as null to keep normal startup flow.
-const DEBUG_START_SCENE = "scene14"; // or "season1stats", "scene3", etc. for testing specific scenes
+const DEBUG_START_SCENE = "runjump"; // or "season1stats", "scene3", etc. for testing specific scenes
 
 var config = {
     type: Phaser.AUTO,

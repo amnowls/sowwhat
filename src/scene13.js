@@ -21,7 +21,7 @@ export default class scene13 extends Phaser.Scene {
                 callbacks: [
                     () => {
                         this.scene.get('hud').updateStats();
-                        this.scene.start("slots", { nextScene: "scene14", sourceScene: "scene13" });
+                        this.scene.start("planttiming", { nextScene: "scene14", sourceScene: "scene13" });
                     }
                 ]
             });
@@ -35,7 +35,7 @@ export default class scene13 extends Phaser.Scene {
                 callbacks: [
                     () => {
                         this.scene.get('hud').updateStats();
-                        this.scene.start("slots", { nextScene: "scene14", sourceScene: "scene13" });
+                        this.scene.start("planttiming", { nextScene: "scene14", sourceScene: "scene13" });
                     }]
             },);
 

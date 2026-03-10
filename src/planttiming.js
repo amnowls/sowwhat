@@ -43,17 +43,18 @@ export default class planttiming extends Phaser.Scene {
         this.hitsNeeded = 3;
         this.hits = 0;
         this.attempts = 0;
-        if (this.game.globalState.season == 1) {
-            this.roundTimeMs = 7000;
-        } else if (this.game.globalState.season == 2) {
-            this.roundTimeMs = 6000;
-        } else if (this.game.globalState.season == 3) {
-            this.roundTimeMs = 5000;
-        } else if (this.game.globalState.season == 4) {
-            this.roundTimeMs = 4000;
-        } else {
-            this.roundTimeMs = 3000;
-        }
+        this,this.roundTimeMs = 7000 - (this.game.globalState.season - 1) * 1000;
+        // if (this.game.globalState.season == 1) {
+        //     this.roundTimeMs = 7000;
+        // } else if (this.game.globalState.season == 2) {
+        //     this.roundTimeMs = 6000;
+        // } else if (this.game.globalState.season == 3) {
+        //     this.roundTimeMs = 5000;
+        // } else if (this.game.globalState.season == 4) {
+        //     this.roundTimeMs = 4000;
+        // } else {
+        //     this.roundTimeMs = 3000;
+        // }
             this.timeRemainingMs = this.roundTimeMs;
             this.roundOver = false;
 

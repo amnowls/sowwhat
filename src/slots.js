@@ -144,27 +144,51 @@ export default class slots extends Phaser.Scene {
         if (symbol1 === symbol2 && symbol2 === symbol3) {
             this.resultText.setText("HIT! - your neighbors ACCEPTED the trade");
             this.resultText.setColor("#33ff00");
+            createMenu(this, {
+                title: [""],
+                options: ["[ accept seeds and continue ]"],
+                callbacks: [
+                    () => this.scene.start(this.nextScene),
+
+                ],
+                startY: 240,
+                gap: 36,
+                fontColor: "#ffffff",
+                highlightColor: "#1645f5"
+            });
         } else {
             this.resultText.setText("MISS - your neighbours REFUSED the trade");
             this.resultText.setColor("#ed3833");
+            createMenu(this, {
+                title: [""],
+                options: ["[ continue - illegally plant uncertified seeds ]"],
+                callbacks: [
+                    () => this.scene.start(this.nextScene),
+
+                ],
+                startY: 240,
+                gap: 36,
+                fontColor: "#ffffff",
+                highlightColor: "#1645f5"
+            });
         }
 
         // Reset button
         this.spinButton.setFillStyle(0xffffff, 0);
         this.isSpinning = false;
 
-        createMenu(this, {
-            title: [""],
-            options: ["[ continue ]"],
-            callbacks: [
-                () => this.scene.start(this.nextScene),
+        // createMenu(this, {
+        //     title: [""],
+        //     options: ["[ continue ]"],
+        //     callbacks: [
+        //         () => this.scene.start(this.nextScene, { sourceScene: this.sourceScene }),
 
-            ],
-            startY: 240,
-            gap: 36,
-            fontColor: "#ffffff",
-            highlightColor: "#1645f5"
-        });
+        //     ],
+        //     startY: 240,
+        //     gap: 36,
+        //     fontColor: "#ffffff",
+        //     highlightColor: "#1645f5"
+        // });
     }
 
 

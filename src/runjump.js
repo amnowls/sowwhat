@@ -7,9 +7,14 @@ export default class runjump extends Phaser.Scene {
         super("runjump");
     }
 
+    init(data) {
+        this.nextScene = data?.nextScene || "titlescene";
+        this.sourceScene = data?.sourceScene || null;
+    }
     preload() {
         // this.load.image('ground', 'assets/ground.png');
         this.load.atlas('farmer', 'assets/farmer.png', 'assets/farmer.json');
+        this.load.atlas('inspector', 'assets/inspector.png', 'assets/inspector.json');
         this.load.image('rock', 'assets/rock.png');
 
         // this.load.spritesheet('cassava', 'assets/crops/cassava.png', {
@@ -43,7 +48,9 @@ export default class runjump extends Phaser.Scene {
         this.jumpKeyPressTime = 0;
         this.isJumping = false;
         this.lastSpawnTime = 0;
-        this.spawnInterval = 1000;
+        this.spawnIntervalMin = 650;
+        this.spawnIntervalMax = 1000;
+        this.spawnInterval = 900;
         this.inspectorJumpVelocity = -600;
         this.inspectorJumpTriggerDistance = 30;
         this.inspectorJumpCooldownMs = 420;
@@ -63,11 +70,14 @@ export default class runjump extends Phaser.Scene {
         this.ground.setStrokeStyle(2, 0x000000);
         this.physics.add.existing(this.ground, true); // true = static body
 
-        this.gravity = 1250;
+        this.gravity = 1350;
 
-        this.farmer = this.add.sprite(this.frameX + 170, groundY - 70, 'farmer', 'farmer 0.png');
+        this.farmer = this.add.sprite(this.frameX + 140, groundY - 150, 'farmer', 'farmer 0.png');
         this.physics.add.existing(this.farmer);
-        this.farmer.body.setSize(2, 70);
+        // setSize: hitbox dimensions. setOffset: shifts hitbox toward bottom of sprite,
+        // raising the farmer's visual position without changing where it sits on the ground.
+        this.farmer.body.setSize(36, 70);
+        this.farmer.body.setOffset(22, 50);
         this.physics.add.collider(this.farmer, this.ground);
 
         // Create animation if it doesn't exist
@@ -78,20 +88,47 @@ export default class runjump extends Phaser.Scene {
                     prefix: 'farmer ',
                     suffix: '.png',
                     start: 0,
-                    end: 7
+                    end: 3
                 }),
-                frameRate: 8,
+                frameRate: 10,
                 repeat: -1
             });
         }
 
         this.farmer.play('farmerWalk');
 
-        this.inspector = this.add.rectangle(this.frameX + 60, groundY - 45, 30, 50, 0xff0000);
+        // this.inspector = this.add.rectangle(this.frameX + 60, groundY - 45, 30, 50, 0xff0000);
+        // this.physics.add.existing(this.inspector);
+        // this.inspector.body.setSize(30, 50);
+        // this.inspector.body.setCollideWorldBounds(true);
+        // this.physics.add.collider(this.inspector, this.ground);
+
+
+
+        this.inspector = this.add.sprite(this.frameX + 60, groundY - 150, 'inspector', 'inspector 0.png');
         this.physics.add.existing(this.inspector);
-        this.inspector.body.setSize(30, 50);
-        this.inspector.body.setCollideWorldBounds(true);
+        // setSize: hitbox dimensions. setOffset: shifts hitbox toward bottom of sprite,
+        // raising the farmer's visual position without changing where it sits on the ground.
+        this.inspector.body.setSize(36, 70);
+        this.inspector.body.setOffset(22, 65);
         this.physics.add.collider(this.inspector, this.ground);
+
+        // Create animation if it doesn't exist
+        if (!this.anims.exists('inspectorWalk')) {
+            this.anims.create({
+                key: 'inspectorWalk',
+                frames: this.anims.generateFrameNames('inspector', {
+                    prefix: 'inspector ',
+                    suffix: '.png',
+                    start: 0,
+                    end: 3
+                }),
+                frameRate: 10,
+                repeat: -1
+            });
+        }
+
+        this.inspector.play('inspectorWalk');
 
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -109,156 +146,156 @@ export default class runjump extends Phaser.Scene {
         // Start jump if key pressed, farmer grounded, and not already jumping
 
         if (this.farmer && this.farmer.body && jumpPressed && this.farmer.body.touching.down && !this.isJumping) {
-        this.farmer.body.setVelocityY(-700);
-        this.isJumping = true;
-        console.log("Jumped!");
-    }
-    // if (this.farmer && this.farmer.body && jumpPressed && this.farmer.body.touching.down && !this.isJumping) {
-    //     this.jumpKeyPressTime = this.time.now;
-    //     this.isJumping = true;
-    //     console.log("Jump started!");
-    // }
-
-    // // Apply upward impulse while key is held and within 1 second
-    // if (this.farmer && this.farmer.body && jumpPressed && this.isJumping) {
-    //     const holdDuration = this.time.now - this.jumpKeyPressTime;
-    //     if (holdDuration <= 150) {
-    //         // Apply upward impulse each frame (constant velocity while held)
-    //         this.farmer.body.velocity.y = -500;
-    //     } else {
-    //         this.isJumping = false;
-    //     }
-    // } else if (this.isJumping && !jumpPressed) {
-    //     // Stop jumping when key is released
-    //     this.isJumping = false;
-    // }
-
-    // Reset jump state when farmer touches ground
-    if(this.farmer && this.farmer.body && this.farmer.body.touching.down && !jumpPressed) {
-    this.isJumping = false;
-}
-
-// Spawn obstacles at intervals
-if (!this.gameIsOver && this.time.now - this.lastSpawnTime >= this.spawnInterval) {
-    this.spawnObstacle();
-    this.lastSpawnTime = this.time.now;
-    this.spawnInterval = Phaser.Math.Between(500, 1200);
-}
-
-this.autoJumpInspector();
-
-this.obstacles.children.iterate(obstacle => {
-    if (obstacle && obstacle.x < this.frameX + 40) {
-        obstacle.destroy();
-    }
-});
-
-const elapsed = (this.time.now - this.startTime) / 1000;
-if (!this.gameIsOver && elapsed >= 40) {
-    this.winGame();
-}
-
-    }
-
-spawnObstacle() {
-    const elapsed = (this.time.now - this.startTime) / 1000;
-    const spawnX = this.frameX + this.frameWidth - 25;
-    const spawnY = this.ground.y - this.ground.height / 2 - 10;
-    const obstacle = this.add.image(spawnX, spawnY, "rock");
-    this.physics.add.existing(obstacle);
-    this.obstacles.add(obstacle);
-    obstacle.body.setSize(obstacle.width, obstacle.height);
-    if (elapsed >= 33) {
-        obstacle.body.setVelocityX(-500);
-    } else if (elapsed >= 28) {
-        obstacle.body.setVelocityX(-430);
-    } else if (elapsed >= 20) {
-        obstacle.body.setVelocityX(-395);
-    } else
-        if (elapsed >= 13) {
-            obstacle.body.setVelocityX(-355);
-        } else {
-            obstacle.body.setVelocityX(-300);
+            this.farmer.body.setVelocityY(-700);
+            this.isJumping = true;
+            console.log("Jumped!");
         }
-    obstacle.body.setImmovable(true);
-    obstacle.body.setAllowGravity(false);
+        // if (this.farmer && this.farmer.body && jumpPressed && this.farmer.body.touching.down && !this.isJumping) {
+        //     this.jumpKeyPressTime = this.time.now;
+        //     this.isJumping = true;
+        //     console.log("Jump started!");
+        // }
 
-}
+        // // Apply upward impulse while key is held and within 1 second
+        // if (this.farmer && this.farmer.body && jumpPressed && this.isJumping) {
+        //     const holdDuration = this.time.now - this.jumpKeyPressTime;
+        //     if (holdDuration <= 150) {
+        //         // Apply upward impulse each frame (constant velocity while held)
+        //         this.farmer.body.velocity.y = -500;
+        //     } else {
+        //         this.isJumping = false;
+        //     }
+        // } else if (this.isJumping && !jumpPressed) {
+        //     // Stop jumping when key is released
+        //     this.isJumping = false;
+        // }
 
-autoJumpInspector() {
-    if (!this.inspector || !this.inspector.body) {
-        return;
+        // Reset jump state when farmer touches ground
+        if (this.farmer && this.farmer.body && this.farmer.body.touching.down && !jumpPressed) {
+            this.isJumping = false;
+        }
+
+        // Spawn obstacles at intervals
+        if (!this.gameIsOver && this.time.now - this.lastSpawnTime >= this.spawnInterval) {
+            this.spawnObstacle();
+            this.lastSpawnTime = this.time.now;
+            this.spawnInterval = Phaser.Math.Between(this.spawnIntervalMin, this.spawnIntervalMax);
+        }
+
+        this.autoJumpInspector();
+
+        this.obstacles.children.iterate(obstacle => {
+            if (obstacle && obstacle.x < this.frameX + 40) {
+                obstacle.destroy();
+            }
+        });
+
+        const elapsed = (this.time.now - this.startTime) / 1000;
+        if (!this.gameIsOver && elapsed >= 40) {
+            this.winGame();
+        }
+
     }
 
-    const now = this.time.now;
-    if (now - this.inspectorLastJumpTime < this.inspectorJumpCooldownMs) {
-        return;
+    spawnObstacle() {
+        const elapsed = (this.time.now - this.startTime) / 1000;
+        const spawnX = this.frameX + this.frameWidth - 25;
+        const spawnY = this.ground.y - this.ground.height / 2 - 10;
+        const obstacle = this.add.image(spawnX, spawnY, "rock");
+        this.physics.add.existing(obstacle);
+        this.obstacles.add(obstacle);
+        obstacle.body.setSize(obstacle.width, obstacle.height);
+        obstacle.body.setVelocityX(-300 - elapsed * 10); // Increase speed over time
+        // if (elapsed >= 33) {
+        //     obstacle.body.setVelocityX(-500);
+        // } else if (elapsed >= 28) {
+        //     obstacle.body.setVelocityX(-430);
+        // } else if (elapsed >= 20) {
+        //     obstacle.body.setVelocityX(-395);
+        // } else
+        //     if (elapsed >= 13) {
+        //         obstacle.body.setVelocityX(-315);
+        //     } else {
+        //         obstacle.body.setVelocityX(-300);
+        //     }
+        obstacle.body.setImmovable(true);
+        obstacle.body.setAllowGravity(false);
+
     }
 
-    const isGrounded = this.inspector.body.touching.down || this.inspector.body.blocked.down;
-    if (!isGrounded) {
-        return;
-    }
-
-    let closestObstacle = null;
-    let closestDistance = Number.POSITIVE_INFINITY;
-
-    this.obstacles.children.iterate((obstacle) => {
-        if (!obstacle || !obstacle.active || !obstacle.body) {
+    autoJumpInspector() {
+        if (!this.inspector || !this.inspector.body) {
             return;
         }
 
-        const distanceAhead = obstacle.x - this.inspector.x;
-        if (distanceAhead > 0 && distanceAhead < closestDistance) {
-            closestObstacle = obstacle;
-            closestDistance = distanceAhead;
+        const now = this.time.now;
+        if (now - this.inspectorLastJumpTime < this.inspectorJumpCooldownMs) {
+            return;
         }
-    });
 
-    if (!closestObstacle) {
-        return;
+        const isGrounded = this.inspector.body.touching.down || this.inspector.body.blocked.down;
+        if (!isGrounded) {
+            return;
+        }
+
+        let closestObstacle = null;
+        let closestDistance = Number.POSITIVE_INFINITY;
+
+        this.obstacles.children.iterate((obstacle) => {
+            if (!obstacle || !obstacle.active || !obstacle.body) {
+                return;
+            }
+
+            const distanceAhead = obstacle.x - this.inspector.x;
+            if (distanceAhead > 0 && distanceAhead < closestDistance) {
+                closestObstacle = obstacle;
+                closestDistance = distanceAhead;
+            }
+        });
+
+        if (!closestObstacle) {
+            return;
+        }
+
+        const obstacleHalfWidth = (closestObstacle.displayWidth || closestObstacle.width || 0) / 2;
+        const triggerDistance = this.inspectorJumpTriggerDistance + obstacleHalfWidth;
+
+        if (closestDistance <= triggerDistance) {
+            this.inspector.body.setVelocityY(this.inspectorJumpVelocity);
+            this.inspectorLastJumpTime = now;
+        }
     }
 
-    const obstacleHalfWidth = (closestObstacle.displayWidth || closestObstacle.width || 0) / 2;
-    const triggerDistance = this.inspectorJumpTriggerDistance + obstacleHalfWidth;
 
-    if (closestDistance <= triggerDistance) {
-        this.inspector.body.setVelocityY(this.inspectorJumpVelocity);
-        this.inspectorLastJumpTime = now;
+
+    endGame(message, textColor) {
+        this.gameIsOver = true;
+        this.physics.pause();
+        this.farmer.destroy();
+        this.inspector.destroy();
+        this.obstacles.clear(true, true);
+        centerText(this, message, 0, { fill: textColor, fontSize: "20px", align: "center" });
+
+        createMenu(this, {
+            title: [""],
+            options: ["[ continue ]"],
+            callbacks: [
+                () => this.scene.start(this.nextScene, { sourceScene: this.sourceScene }),
+            ],
+            startY: 240,
+            gap: 36,
+            fontColor: "#ffffff",
+            highlightColor: "#1645f5"
+        });
     }
-}
 
+    gameOver() {
+        console.log("Caught by the seed inspector!");
+        this.endGame("you've been caught!", "#ed3833");
+    }
 
-
-endGame(message, textColor) {
-    this.gameIsOver = true;
-    this.physics.pause();
-    this.farmer.destroy();
-    this.inspector.destroy();
-    this.obstacles.clear(true, true);
-    centerText(this, message, 0, { fill: textColor, fontSize: "20px", align: "center" });
-
-    createMenu(this, {
-        title: [""],
-        options: ["[ retry mini game ]", "[ back to title ]"],
-        callbacks: [
-            () => this.scene.restart(),
-            () => this.scene.start("titlescene")
-        ],
-        startY: 240,
-        gap: 36,
-        fontColor: "#ffffff",
-        highlightColor: "#1645f5"
-    });
-}
-
-gameOver() {
-    console.log("Caught by the seed inspector!");
-    this.endGame("you've been caught!", "#ed3833");
-}
-
-winGame() {
-    console.log("You escaped!");
-    this.endGame("you've escaped!", "#33ff00");
-}
+    winGame() {
+        console.log("You escaped!");
+        this.endGame("you've escaped!", "#33ff00");
+    }
 }
