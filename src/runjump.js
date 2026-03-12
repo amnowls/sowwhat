@@ -16,6 +16,9 @@ export default class runjump extends Phaser.Scene {
         this.load.atlas('farmer', 'assets/farmer.png', 'assets/farmer.json');
         this.load.atlas('inspector', 'assets/inspector.png', 'assets/inspector.json');
         this.load.image('rock', 'assets/rock.png');
+        this.load.audio('runjump_background', 'assets/sounds/runjump_background.wav');
+        this.load.audio('youlost', 'assets/sounds/youlost.wav');
+        this.load.audio('youwin', 'assets/sounds/youwin.wav');
 
         // this.load.spritesheet('cassava', 'assets/crops/cassava.png', {
         //     frameWidth: 64,  // width of each frame
@@ -25,10 +28,12 @@ export default class runjump extends Phaser.Scene {
 
     create() {
         escapeReset(this);
-        this.game.ENABLE_MUSIC == false;
-
+        const backgroundMusic = this.sound.get('backgroundMusic');
+        if (backgroundMusic) {
+            backgroundMusic.pause();
+        }
         this.cameras.main.setBackgroundColor("#ed3833");
-
+        this.sound.play('runjump_background', { loop: true, volume: 0.5 });
         // Create a filled rectangular frame centered on screen
         const frameGraphics = this.add.graphics();
         const centerX = this.scale.width / 2 - 400;
@@ -48,12 +53,13 @@ export default class runjump extends Phaser.Scene {
         this.jumpKeyPressTime = 0;
         this.isJumping = false;
         this.lastSpawnTime = 0;
-        this.spawnIntervalMin = 650;
-        this.spawnIntervalMax = 1000;
+        this.spawnIntervalMin = 260;
+        this.spawnIntervalMax = 1300;
         this.spawnInterval = 900;
+        this.obstacleYOffset = 8;
         this.inspectorJumpVelocity = -600;
         this.inspectorJumpTriggerDistance = 30;
-        this.inspectorJumpCooldownMs = 420;
+        this.inspectorJumpCooldownMs = 220;
         this.inspectorLastJumpTime = -9999;
         this.gameIsOver = false;
 
@@ -72,12 +78,12 @@ export default class runjump extends Phaser.Scene {
 
         this.gravity = 1350;
 
-        this.farmer = this.add.sprite(this.frameX + 140, groundY - 150, 'farmer', 'farmer 0.png');
+        this.farmer = this.add.sprite(this.frameX + 155, groundY - 150, 'farmer', 'farmer 0.png');
         this.physics.add.existing(this.farmer);
         // setSize: hitbox dimensions. setOffset: shifts hitbox toward bottom of sprite,
         // raising the farmer's visual position without changing where it sits on the ground.
         this.farmer.body.setSize(36, 70);
-        this.farmer.body.setOffset(22, 50);
+        this.farmer.body.setOffset(22, 40);
         this.physics.add.collider(this.farmer, this.ground);
 
         // Create animation if it doesn't exist
@@ -105,12 +111,12 @@ export default class runjump extends Phaser.Scene {
 
 
 
-        this.inspector = this.add.sprite(this.frameX + 60, groundY - 150, 'inspector', 'inspector 0.png');
+        this.inspector = this.add.sprite(this.frameX + 60, groundY - 250, 'inspector', 'inspector 0.png');
         this.physics.add.existing(this.inspector);
         // setSize: hitbox dimensions. setOffset: shifts hitbox toward bottom of sprite,
         // raising the farmer's visual position without changing where it sits on the ground.
         this.inspector.body.setSize(36, 70);
-        this.inspector.body.setOffset(22, 65);
+        this.inspector.body.setOffset(22, 60);
         this.physics.add.collider(this.inspector, this.ground);
 
         // Create animation if it doesn't exist
@@ -146,7 +152,7 @@ export default class runjump extends Phaser.Scene {
         // Start jump if key pressed, farmer grounded, and not already jumping
 
         if (this.farmer && this.farmer.body && jumpPressed && this.farmer.body.touching.down && !this.isJumping) {
-            this.farmer.body.setVelocityY(-700);
+            this.farmer.body.setVelocityY(-650);
             this.isJumping = true;
             console.log("Jumped!");
         }
@@ -179,7 +185,13 @@ export default class runjump extends Phaser.Scene {
         if (!this.gameIsOver && this.time.now - this.lastSpawnTime >= this.spawnInterval) {
             this.spawnObstacle();
             this.lastSpawnTime = this.time.now;
-            this.spawnInterval = Phaser.Math.Between(this.spawnIntervalMin, this.spawnIntervalMax);
+            const elapsedSeconds = (this.time.now - this.startTime) / 1000;
+            const difficulty = Phaser.Math.Clamp(elapsedSeconds / 40, 0, 1);
+            const aggressiveRamp = Math.pow(difficulty, 1.8);
+            // Early game stays forgiving; last third ramps down interval quickly.
+            const currentMaxInterval = Phaser.Math.Linear(this.spawnIntervalMax, this.spawnIntervalMin + 200, aggressiveRamp);
+            const currentMinInterval = Phaser.Math.Linear(this.spawnIntervalMin + 350, this.spawnIntervalMin, aggressiveRamp);
+            this.spawnInterval = Phaser.Math.Between(Math.floor(currentMinInterval), Math.floor(currentMaxInterval));
         }
 
         this.autoJumpInspector();
@@ -198,14 +210,18 @@ export default class runjump extends Phaser.Scene {
     }
 
     spawnObstacle() {
-        const elapsed = (this.time.now - this.startTime) / 1000;
+        const elapsedSeconds = (this.time.now - this.startTime) / 1000;
+        const difficulty = Phaser.Math.Clamp(elapsedSeconds / 40, 0, 1);
+        const aggressiveRamp = Math.pow(difficulty, 1);
         const spawnX = this.frameX + this.frameWidth - 25;
-        const spawnY = this.ground.y - this.ground.height / 2 - 10;
+        const spawnY = this.ground.y - this.ground.height / 2 - 10 + this.obstacleYOffset;
         const obstacle = this.add.image(spawnX, spawnY, "rock");
         this.physics.add.existing(obstacle);
         this.obstacles.add(obstacle);
+
         obstacle.body.setSize(obstacle.width, obstacle.height);
-        obstacle.body.setVelocityX(-300 - elapsed * 10); // Increase speed over time
+        const obstacleSpeed = Phaser.Math.Linear(280, 620, aggressiveRamp);
+        obstacle.body.setVelocityX(-obstacleSpeed);
         // if (elapsed >= 33) {
         //     obstacle.body.setVelocityX(-500);
         // } else if (elapsed >= 28) {
@@ -280,7 +296,13 @@ export default class runjump extends Phaser.Scene {
             title: [""],
             options: ["[ continue ]"],
             callbacks: [
-                () => this.scene.start(this.nextScene, { sourceScene: this.sourceScene }),
+                () => {
+                    const backgroundMusic = this.sound.get('backgroundMusic');
+                    if (backgroundMusic) {
+                        backgroundMusic.resume();
+                    }
+                    this.scene.start(this.nextScene, { sourceScene: this.sourceScene });
+                }
             ],
             startY: 240,
             gap: 36,
@@ -291,11 +313,13 @@ export default class runjump extends Phaser.Scene {
 
     gameOver() {
         console.log("Caught by the seed inspector!");
+        this.sound.play('youlost');
         this.endGame("you've been caught!", "#ed3833");
     }
 
     winGame() {
         console.log("You escaped!");
+        this.sound.play('youwin');
         this.endGame("you've escaped!", "#33ff00");
     }
 }

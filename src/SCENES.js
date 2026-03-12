@@ -29,3 +29,4 @@ export { default as scene19  } from "./scene19.js";
 export { default as planttiming } from "./planttiming.js";
 export { default as slots } from "./slots.js";
 export { default as runjump } from "./runjump.js";  
+export { default as escapejail } from "./escapejail.js";

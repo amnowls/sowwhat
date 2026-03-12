@@ -12,7 +12,7 @@ export default class scene12 extends Phaser.Scene {
         this.game.globalState.season = 3;
         this.scene.get('hud').updateStats();
         escapeReset(this);
-        centerText(this, "SEASON 3", -80, { fontSize: "32px" });
+        centerText(this, "SEASON 3", -120, { fontSize: "40px" });
         if (this.game.globalState.certified == true) {
             const messageText = "your neighbors are struggling to make a profit with their uncertified seeds\n\nwould you like to illegally share your surplus seeds with neighbors or abide by your contract?";
             createTypewriterText(this, messageText, 0, {}, 6,

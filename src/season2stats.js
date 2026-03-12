@@ -12,13 +12,13 @@ export default class season2stats extends Phaser.Scene {
 
         this.cameras.main.setBackgroundColor("#1645f5");
         if (this.game.globalState.pesticides == true && this.game.globalState.certified == false) {
-            this.game.globalState.yield = this.game.globalState.planting * 3 - this.game.globalState.soilhealth * 3;
+            this.game.globalState.yield = ((this.game.globalState.planting * 3) - this.game.globalState.soilhealthIndex) * 3;
         } else if (this.game.globalState.pesticides == true || this.game.globalState.certified == true) {
-            this.game.globalState.yield = this.game.globalState.planting * 3 - this.game.globalState.soilhealth * 5;
+            this.game.globalState.yield = ((this.game.globalState.planting * 3) - this.game.globalState.soilhealthIndex) * 5;
         } else if (this.game.globalState.pesticides == false && this.game.globalState.certified == false) {
-            this.game.globalState.yield = this.game.globalState.planting * 3 - this.game.globalState.soilhealth * 4;
+            this.game.globalState.yield = ((this.game.globalState.planting * 3) - this.game.globalState.soilhealthIndex) * 4;
         } else {
-            this.game.globalState.yield = this.game.globalState.planting * 3 - this.game.globalState.soilhealth * 4;
+            this.game.globalState.yield = ((this.game.globalState.planting * 3) - this.game.globalState.soilhealthIndex) * 4;
         }
         centerText(this, "SEASON 2 STATS.", -80, { fill: "#ffb000", fontSize: "30px", fontFamily: 'PressStart2P', align: "center" },);
         createTypewriterText(

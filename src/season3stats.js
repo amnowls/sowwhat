@@ -15,7 +15,7 @@ export default class season3stats extends Phaser.Scene {
     centerText(this, "SEASON 3 STATS.", -80, {fill: "#ffb000", fontSize: "30px", fontFamily: 'PressStart2P', align: "center"},);
     createTypewriterText(
         this,
-        "\n\nPOOR HARVEST.\nsoilhealth: " + this.game.globalState.soilhealth + "\nneighbor score: " + this.game.globalState.neighborScore,
+        "\n\nprofit:\nsoilhealth: " + this.game.globalState.soilhealth + "\nneighbor score: " + this.game.globalState.neighborScore,
         0,
         {fill: "#ffb000"},
         6, 

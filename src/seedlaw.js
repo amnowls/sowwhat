@@ -9,16 +9,17 @@ export default class seedlaw extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('tv', 'assets/tv_sowwhat.png');
         // this.load.audio('seedlawAudio', 'assets/sounds/seedlaw-speech.mp3');
     }
 
     create() {
         this.game.globalState.season == 2;
         this.scene.get('hud').updateStats();
-
+        this.add.image(window.innerWidth / 2, window.innerHeight / 2, 'tv').setScale(2.5);
         this.scene.setVisible(true, 'hud');
         escapeReset(this);
-        centerText(this, "SEASON 2", -80, { fontSize: "32px" });
+        centerText(this, "SEASON 2 ", -120, { fontSize: "40px" });
         const messageText = "RADIO ANNOUNCEMENT: new law passed!\n\n'" + this.game.globalState.crop + " seeds are now patented by Monsanto. all farmers MUST use certified seeds from corporate suppliers. penalties for planting uncertified seeds include fines and loss of land tenure.'";
         createTypewriterText(this, messageText, 0, {}, 6,
             () => {

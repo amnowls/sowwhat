@@ -21,13 +21,14 @@ export default class loading1 extends Phaser.Scene {
             key: 'clock_anim',
             frames: this.anims.generateFrameNumbers('clock', { start: 1, end: 11 }),
             frameRate: 6,
-            repeat: 0 // play once
+            repeat: 1 // play once
         });
         const sprite = this.add.sprite(window.innerWidth/2, window.innerHeight/2, "clock");
         sprite.play('clock_anim');
         sprite.setScale(1.5);
 
         sprite.on('animationcomplete', () => {
+            sprite.destroy();
             createMenu(this, {
                 title: "your harvest is ready. click to view your yield.",
                 options: [

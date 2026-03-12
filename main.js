@@ -7,19 +7,20 @@
 // import scene4 from "./src/scene4.js";
 // import scene5 from "./src/scene5.js";
 
-import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19, slots, planttiming, runjump} from "./src/SCENES.js";
+import { hud, titlescene, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19, slots, planttiming, runjump, escapejail} from "./src/SCENES.js";
 import musicscene from "./src/musicscene.js";
 
 // Set this to a scene key (example: "planttiming") to jump directly there during development.
 // Leave as null to keep normal startup flow.
-const DEBUG_START_SCENE = "runjump"; // or "season1stats", "scene3", etc. for testing specific scenes
+const DEBUG_START_SCENE = "escapejail"; // or "season1stats", "scene3", etc. for testing specific scenes
 
 var config = {
     type: Phaser.AUTO,
     backgroundColor: "#ffb000",
     width: window.innerWidth,
     height: window.innerHeight,
-    scene: [hud, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19, planttiming, slots, titlescene, runjump],
+
+    scene: [hud, loading1, scene1, cropchoice, certify, scene3, scene4, season1stats, seedlaw, scene6, scene7, scene8, scene9, scene10, season2stats, scene11, scene12, scene13, scene14, scene15, season3stats, scene16, scene17, scene18, scene19, planttiming, slots, titlescene, runjump, escapejail],
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH

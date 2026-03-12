@@ -20,7 +20,7 @@ export default class season1stats extends Phaser.Scene {
         // } else {
         //     this.game.globalState.yield = this.game.globalState.planting * 3 - this.game.globalState.soilhealth * 4;
         // }
-        this.game.globalState.yield = ((this.game.globalState.planting * 3) - this.game.globalState.soilhealthIndex) * 5;
+        this.game.globalState.yield = (this.game.globalState.planting * 3)  * 5;
 
         // this.game.globalState.profit = this.game.globalState.yield * 2 - (this.game.globalState.criminality * 5 + this.game.globalState.fines * 10);
 
