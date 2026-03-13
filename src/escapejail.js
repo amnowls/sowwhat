@@ -50,7 +50,7 @@ export default class escapejail extends Phaser.Scene {
         frameGraphics.fillRect(this.field.x, this.field.y, this.field.width, this.field.height);
         frameGraphics.lineStyle(4, 0xffffff, 1); // 4px white border
         frameGraphics.strokeRect(this.field.x, this.field.y, this.field.width, this.field.height);
-        const borderInset = 8;
+        const borderInset = -10;
         this.physics.world.setBounds(
             this.field.x + borderInset,
             this.field.y + borderInset,
@@ -61,25 +61,37 @@ export default class escapejail extends Phaser.Scene {
             true,
             true
         );
+        this.playfieldTopBound = this.field.y + borderInset;
 
 
         this.roundOver = false;
         this.pelletsCollected = 0;
         this.pelletsNeeded = 8;
         this.policeSpeed = 250;
-        this.policeSlideX = 1;
-        this.policeSlideY = 1;
-        this.policeWasBlockedH = false;
-        this.policeWasBlockedV = false;
-        this.policeUnstuckTimer = 0;
-        this.policeUnstuckVX = 0;
-        this.policeUnstuckVY = 0;
-        this.policeStuckCheckPos = null;
-        this.policeStuckCheckTime = 400;
         this.policeSmoothedVX = 0;
+        this.navCellSize = 26;
+        this.navCols = 0;
+        this.navRows = 0;
+        this.navBlocked = [];
+        this.policePath = [];
+        this.policePathIndex = 0;
+        this.policeReplanTimer = 0;
+        this.policeReplanEveryMs = 180;
+        this.lastPoliceStartCellKey = null;
+        this.lastPoliceGoalCellKey = null;
+        this.policeStuckCheckTimer = 220;
+        this.policeStuckCheckEveryMs = 220;
+        this.policeStuckMinMove = 10;
+        this.policeStuckCount = 0;
+        this.policeStuckLimit = 2;
+        this.policeLastSamplePos = null;
+        this.policeNudgeTimer = 0;
+        this.policeNudgeVX = 0;
+        this.policeNudgeVY = 0;
 
         this.drawPlayfield();
         this.createWalls();
+        this.buildNavGrid();
         this.createActors();
         this.createPellets();
         this.createExit();
@@ -90,7 +102,7 @@ export default class escapejail extends Phaser.Scene {
     }
 
     drawPlayfield() {
-        centerText(this, "ESCAPE JAIL", -280, { fill: "#ffffff", fontSize: "28px" });
+        centerText(this, "ESCAPE JAIL", -200, { fill: "#ffffff", fontSize: "30px" });
     }
 
     createWalls() {
@@ -138,7 +150,7 @@ export default class escapejail extends Phaser.Scene {
         createHWall(laneLeft, laneRight, laneTop);
         createHWall(laneLeft, midX - 50, laneBottom);
         createHWall(midX + 50, laneRight, laneBottom);
-        createVWall(laneLeft, laneTop, midY - 34);
+        createVWall(laneLeft, laneTop, midY - 54);
 
         createVWall(midX + 50, midY + 34, laneBottom);
         createVWall(laneRight, midY + 34, laneBottom);
@@ -150,8 +162,8 @@ export default class escapejail extends Phaser.Scene {
         // Extra branches for more maze-like routing
         createHWall(midX + 62, laneRight, laneTop + 100);
         createHWall(laneLeft, midX - 62, laneBottom - 100);
-        createVWall(midX - 150, laneTop + 120, midY - 38);
-        createVWall(midX + 150, midY + 38, laneBottom - 120);
+        // createVWall(midX - 150, laneTop + 120, midY - 38);
+        // createVWall(midX + 150, midY + 38, laneBottom - 120);
     }
 
     createActors() {
@@ -163,7 +175,7 @@ export default class escapejail extends Phaser.Scene {
 
         this.police = this.physics.add.sprite(this.field.x + this.field.width - 80, this.field.y + this.field.height - 70, "inspector", "inspector 0.png");
         this.police.setScale(0.7);
-        this.police.body.setSize(36, 70);
+        this.police.body.setSize(30, 55);
         this.police.body.setOffset(22, 60);
         this.police.setCollideWorldBounds(true);
 
@@ -201,100 +213,303 @@ export default class escapejail extends Phaser.Scene {
         this.physics.add.collider(this.farmer, this.walls);
         this.physics.add.collider(this.police, this.walls);
         this.physics.add.overlap(this.farmer, this.police, () => this.endRound(false), null, this);
+        this.policeLastSamplePos = { x: this.police.x, y: this.police.y };
     }
 
-    updatePoliceChase(delta) {
-        const toFarmerX = this.farmer.x - this.police.x;
-        const toFarmerY = this.farmer.y - this.police.y;
-        const distance = Math.hypot(toFarmerX, toFarmerY) || 1;
+    buildNavGrid() {
+        this.navCols = Math.max(1, Math.floor(this.field.width / this.navCellSize));
+        this.navRows = Math.max(1, Math.floor(this.field.height / this.navCellSize));
+        this.navBlocked = Array.from({ length: this.navRows }, () => Array(this.navCols).fill(false));
 
-        // === Stuck detection: sample position every 400ms ===
-        if (!this.policeStuckCheckPos) {
-            this.policeStuckCheckPos = { x: this.police.x, y: this.police.y };
+        const policeRadius = 16;
+        const inflate = policeRadius + 2;
+        for (let row = 0; row < this.navRows; row += 1) {
+            for (let col = 0; col < this.navCols; col += 1) {
+                const world = this.cellToWorld(col, row);
+                for (const wall of this.wallRects) {
+                    if (
+                        world.x >= wall.left - inflate
+                        && world.x <= wall.right + inflate
+                        && world.y >= wall.top - inflate
+                        && world.y <= wall.bottom + inflate
+                    ) {
+                        this.navBlocked[row][col] = true;
+                        break;
+                    }
+                }
+            }
         }
-        this.policeStuckCheckTime -= delta;
-        if (this.policeStuckCheckTime <= 0) {
-            const moved = Math.hypot(
-                this.police.x - this.policeStuckCheckPos.x,
-                this.police.y - this.policeStuckCheckPos.y
-            );
-            this.policeStuckCheckPos = { x: this.police.x, y: this.police.y };
-            this.policeStuckCheckTime = 400;
+    }
 
-            if (moved < 20 && this.policeUnstuckTimer <= 0) {
-                // Compute combined push direction away from all nearby walls,
-                // weighted by inverse distance so the closest wall dominates.
-                let pushX = 0, pushY = 0;
-                for (const rect of this.wallRects) {
-                    const cx = Phaser.Math.Clamp(this.police.x, rect.left, rect.right);
-                    const cy = Phaser.Math.Clamp(this.police.y, rect.top, rect.bottom);
-                    let awayX = this.police.x - cx;
-                    let awayY = this.police.y - cy;
-                    const d = Math.hypot(awayX, awayY) || 0.1;
-                    pushX += (awayX / d) * (1 / d);
-                    pushY += (awayY / d) * (1 / d);
-                }
-                const pushLen = Math.hypot(pushX, pushY);
-                if (pushLen > 0) {
-                    pushX /= pushLen;
-                    pushY /= pushLen;
-                } else {
-                    pushX = toFarmerX / distance;
-                    pushY = toFarmerY / distance;
-                }
-                // Flip the slide directions so police tries the other path on next approach.
-                this.policeSlideX = -this.policeSlideX;
-                this.policeSlideY = -this.policeSlideY;
-                this.policeWasBlockedH = false;
-                this.policeWasBlockedV = false;
+    worldToCell(x, y) {
+        const localX = x - this.field.x;
+        const localY = y - this.field.y;
+        const col = Phaser.Math.Clamp(Math.floor(localX / this.navCellSize), 0, this.navCols - 1);
+        const row = Phaser.Math.Clamp(Math.floor(localY / this.navCellSize), 0, this.navRows - 1);
+        return { col, row };
+    }
 
-                this.policeUnstuckTimer = 350;
-                this.policeUnstuckVX = pushX * this.policeSpeed;
-                this.policeUnstuckVY = pushY * this.policeSpeed;
+    cellToWorld(col, row) {
+        return {
+            x: this.field.x + col * this.navCellSize + this.navCellSize / 2,
+            y: this.field.y + row * this.navCellSize + this.navCellSize / 2
+        };
+    }
+
+    isWalkable(col, row) {
+        if (col < 0 || row < 0 || col >= this.navCols || row >= this.navRows) return false;
+        return !this.navBlocked[row][col];
+    }
+
+    nearestWalkableCell(startCol, startRow, maxRadius = 4) {
+        if (this.isWalkable(startCol, startRow)) return { col: startCol, row: startRow };
+
+        for (let radius = 1; radius <= maxRadius; radius += 1) {
+            const minCol = Math.max(0, startCol - radius);
+            const maxCol = Math.min(this.navCols - 1, startCol + radius);
+            const minRow = Math.max(0, startRow - radius);
+            const maxRow = Math.min(this.navRows - 1, startRow + radius);
+
+            for (let row = minRow; row <= maxRow; row += 1) {
+                for (let col = minCol; col <= maxCol; col += 1) {
+                    const onRing = row === minRow || row === maxRow || col === minCol || col === maxCol;
+                    if (onRing && this.isWalkable(col, row)) return { col, row };
+                }
+            }
+        }
+        return null;
+    }
+
+    reconstructPath(cameFrom, endKey) {
+        const out = [];
+        let cursor = endKey;
+        while (cursor) {
+            const [colStr, rowStr] = cursor.split(":");
+            out.push({ col: Number(colStr), row: Number(rowStr) });
+            cursor = cameFrom.get(cursor) || null;
+        }
+        out.reverse();
+        return out;
+    }
+
+    findPathAStar(startCol, startRow, goalCol, goalRow) {
+        const startKey = `${startCol}:${startRow}`;
+        const goalKey = `${goalCol}:${goalRow}`;
+
+        if (startKey === goalKey) return [{ col: startCol, row: startRow }];
+        if (!this.isWalkable(startCol, startRow) || !this.isWalkable(goalCol, goalRow)) return [];
+
+        const open = [{ col: startCol, row: startRow }];
+        const openSet = new Set([startKey]);
+        const cameFrom = new Map();
+        const gScore = new Map([[startKey, 0]]);
+        const fScore = new Map([[startKey, Math.abs(goalCol - startCol) + Math.abs(goalRow - startRow)]]);
+
+        const neighbors = [
+            { dc: 1, dr: 0 },
+            { dc: -1, dr: 0 },
+            { dc: 0, dr: 1 },
+            { dc: 0, dr: -1 }
+        ];
+
+        while (open.length > 0) {
+            let bestIndex = 0;
+            let bestKey = `${open[0].col}:${open[0].row}`;
+            let bestF = fScore.get(bestKey) ?? Number.POSITIVE_INFINITY;
+            for (let i = 1; i < open.length; i += 1) {
+                const key = `${open[i].col}:${open[i].row}`;
+                const f = fScore.get(key) ?? Number.POSITIVE_INFINITY;
+                if (f < bestF) {
+                    bestF = f;
+                    bestIndex = i;
+                    bestKey = key;
+                }
+            }
+
+            const current = open.splice(bestIndex, 1)[0];
+            openSet.delete(bestKey);
+            if (bestKey === goalKey) return this.reconstructPath(cameFrom, goalKey);
+
+            const currentG = gScore.get(bestKey) ?? Number.POSITIVE_INFINITY;
+            for (const n of neighbors) {
+                const nextCol = current.col + n.dc;
+                const nextRow = current.row + n.dr;
+                if (!this.isWalkable(nextCol, nextRow)) continue;
+
+                const nextKey = `${nextCol}:${nextRow}`;
+                const tentativeG = currentG + 1;
+                if (tentativeG >= (gScore.get(nextKey) ?? Number.POSITIVE_INFINITY)) continue;
+
+                cameFrom.set(nextKey, bestKey);
+                gScore.set(nextKey, tentativeG);
+                const h = Math.abs(goalCol - nextCol) + Math.abs(goalRow - nextRow);
+                fScore.set(nextKey, tentativeG + h);
+                if (!openSet.has(nextKey)) {
+                    open.push({ col: nextCol, row: nextRow });
+                    openSet.add(nextKey);
+                }
             }
         }
 
-        // === Unstuck phase: push away from wall for fixed duration ===
-        if (this.policeUnstuckTimer > 0) {
-            this.policeUnstuckTimer -= delta;
-            this.police.body.setVelocity(this.policeUnstuckVX, this.policeUnstuckVY);
+        return [];
+    }
+
+    replanPolicePath() {
+        const policeCellRaw = this.worldToCell(this.police.x, this.police.y);
+        const farmerCellRaw = this.worldToCell(this.farmer.x, this.farmer.y);
+
+        const policeCell = this.nearestWalkableCell(policeCellRaw.col, policeCellRaw.row) || policeCellRaw;
+        const farmerCell = this.nearestWalkableCell(farmerCellRaw.col, farmerCellRaw.row) || farmerCellRaw;
+
+        const startKey = `${policeCell.col}:${policeCell.row}`;
+        const goalKey = `${farmerCell.col}:${farmerCell.row}`;
+        const sameEndpoints = this.lastPoliceStartCellKey === startKey && this.lastPoliceGoalCellKey === goalKey;
+        if (sameEndpoints && this.policePath.length > 0 && this.policePathIndex < this.policePath.length) return;
+
+        this.lastPoliceStartCellKey = startKey;
+        this.lastPoliceGoalCellKey = goalKey;
+
+        const pathCells = this.findPathAStar(policeCell.col, policeCell.row, farmerCell.col, farmerCell.row);
+        if (pathCells.length === 0) {
+            this.policePath = [];
+            this.policePathIndex = 0;
             return;
         }
 
-        // === Normal direct chase ===
-        let vx = (toFarmerX / distance) * this.policeSpeed;
-        let vy = (toFarmerY / distance) * this.policeSpeed;
+        this.policePath = pathCells.map((cell) => this.cellToWorld(cell.col, cell.row));
+        this.policePathIndex = this.policePath.length > 1 ? 1 : 0;
+    }
 
-        const b = this.police.body.blocked;
-        const blockedH = (b.left && vx < 0) || (b.right && vx > 0);
-        const blockedV = (b.up && vy < 0) || (b.down && vy > 0);
+    getPoliceRepulsionDirection() {
+        let pushX = 0;
+        let pushY = 0;
+        const influenceRadius = 70;
 
-        if (blockedH) {
-            // Lock slide direction on first contact; fall back to existing if farmer is level.
-            if (!this.policeWasBlockedH) {
-                this.policeSlideY = Math.sign(toFarmerY) || this.policeSlideY;
-            }
-            vx = 0;
-            vy = this.policeSlideY * this.policeSpeed;
-        } else if (blockedV) {
-            if (!this.policeWasBlockedV) {
-                this.policeSlideX = Math.sign(toFarmerX) || this.policeSlideX;
-            }
-            vy = 0;
-            vx = this.policeSlideX * this.policeSpeed;
+        for (const wall of this.wallRects) {
+            const closestX = Phaser.Math.Clamp(this.police.x, wall.left, wall.right);
+            const closestY = Phaser.Math.Clamp(this.police.y, wall.top, wall.bottom);
+            const awayX = this.police.x - closestX;
+            const awayY = this.police.y - closestY;
+            const d = Math.hypot(awayX, awayY);
+            if (d > influenceRadius) continue;
+
+            const safeDist = Math.max(0.001, d);
+            const weight = (influenceRadius - safeDist) / influenceRadius;
+            pushX += (awayX / safeDist) * weight;
+            pushY += (awayY / safeDist) * weight;
         }
 
-        this.policeWasBlockedH = blockedH;
-        this.policeWasBlockedV = blockedV;
+        const len = Math.hypot(pushX, pushY);
+        if (len > 0.001) {
+            return { x: pushX / len, y: pushY / len };
+        }
 
-        this.police.body.setVelocity(vx, vy);
+        if (this.policePath.length > 0 && this.policePathIndex < this.policePath.length) {
+            const target = this.policePath[this.policePathIndex];
+            const dx = target.x - this.police.x;
+            const dy = target.y - this.police.y;
+            const d = Math.hypot(dx, dy) || 1;
+            return { x: dx / d, y: dy / d };
+        }
+
+        return { x: 1, y: 0 };
+    }
+
+    triggerPoliceUnstick() {
+        const dir = this.getPoliceRepulsionDirection();
+
+        this.policeNudgeTimer = 150;
+        this.policeNudgeVX = dir.x * (this.policeSpeed * 0.9);
+        this.policeNudgeVY = dir.y * (this.policeSpeed * 0.9);
+
+        // Force a fresh route from the new position after nudge resolves.
+        this.lastPoliceStartCellKey = null;
+        this.policeReplanTimer = 0;
+        this.policePath = [];
+        this.policePathIndex = 0;
+    }
+
+    updatePoliceStuckState(delta, intendedVX, intendedVY) {
+        if (!this.policeLastSamplePos) {
+            this.policeLastSamplePos = { x: this.police.x, y: this.police.y };
+        }
+
+        this.policeStuckCheckTimer -= delta;
+        if (this.policeStuckCheckTimer > 0) return;
+        this.policeStuckCheckTimer = this.policeStuckCheckEveryMs;
+
+        const moved = Math.hypot(
+            this.police.x - this.policeLastSamplePos.x,
+            this.police.y - this.policeLastSamplePos.y
+        );
+        this.policeLastSamplePos = { x: this.police.x, y: this.police.y };
+
+        const wantsToMove = Math.hypot(intendedVX, intendedVY) > 20;
+        const blocked = this.police.body.blocked.left || this.police.body.blocked.right || this.police.body.blocked.up || this.police.body.blocked.down;
+        if (wantsToMove && blocked && moved < this.policeStuckMinMove) {
+            this.policeStuckCount += 1;
+        } else {
+            this.policeStuckCount = 0;
+        }
+
+        if (this.policeStuckCount >= this.policeStuckLimit) {
+            this.policeStuckCount = 0;
+            this.triggerPoliceUnstick();
+        }
+    }
+
+    updatePoliceChase(delta) {
+        if (this.policeNudgeTimer > 0) {
+            this.policeNudgeTimer -= delta;
+            this.police.body.setVelocity(this.policeNudgeVX, this.policeNudgeVY);
+            return;
+        }
+
+        this.policeReplanTimer -= delta;
+        if (this.policeReplanTimer <= 0) {
+            this.policeReplanTimer = this.policeReplanEveryMs;
+            this.replanPolicePath();
+        }
+
+        if (this.policePath.length > 0 && this.policePathIndex < this.policePath.length) {
+            let waypoint = this.policePath[this.policePathIndex];
+            let dx = waypoint.x - this.police.x;
+            let dy = waypoint.y - this.police.y;
+            let dist = Math.hypot(dx, dy);
+
+            const arrivalRadius = 10;
+            while (dist < arrivalRadius && this.policePathIndex < this.policePath.length - 1) {
+                this.policePathIndex += 1;
+                waypoint = this.policePath[this.policePathIndex];
+                dx = waypoint.x - this.police.x;
+                dy = waypoint.y - this.police.y;
+                dist = Math.hypot(dx, dy);
+            }
+
+            if (dist > 0.0001) {
+                const vx = (dx / dist) * this.policeSpeed;
+                const vy = (dy / dist) * this.policeSpeed;
+                this.police.body.setVelocity(vx, vy);
+                this.updatePoliceStuckState(delta, vx, vy);
+                return;
+            }
+        }
+
+        // Fallback if no path is available.
+        const toFarmerX = this.farmer.x - this.police.x;
+        const toFarmerY = this.farmer.y - this.police.y;
+        const distance = Math.hypot(toFarmerX, toFarmerY) || 1;
+        const fallbackVX = (toFarmerX / distance) * this.policeSpeed;
+        const fallbackVY = (toFarmerY / distance) * this.policeSpeed;
+        this.police.body.setVelocity(fallbackVX, fallbackVY);
+        this.updatePoliceStuckState(delta, fallbackVX, fallbackVY);
     }
 
     createPellets() {
         this.pellets = this.physics.add.staticGroup();
 
         const spots = [
-            [this.field.x + 230, this.field.y + 40],
+            [this.field.x + 200, this.field.y + 40],
             [this.field.x + this.field.width / 2, this.field.y + 170],
             [this.field.x + this.field.width - 40, this.field.y + 70],
             [this.field.x + 120, this.field.y + this.field.y],
@@ -336,12 +551,12 @@ export default class escapejail extends Phaser.Scene {
     }
 
     createHud() {
-        this.hudText = this.add.text(this.field.x, this.field.y - 44, "", {
+        this.hudText = this.add.text(this.field.width + 200, this.field.y + this.field.height - 20, "", {
             fontFamily: "PressStart2P",
             fontSize: "12px",
             fill: "#ffffff"
         });
-        this.hintText = this.add.text(this.field.x, this.field.y + this.field.height + 14, "use arrow keys or WASD. collect all dots, then reach the gate.", {
+        this.hintText = this.add.text(this.field.x + 20, this.field.y + this.field.height - 20, "collect all dots, then reach the gate", {
             fontFamily: "PressStart2P",
             fontSize: "11px",
             fill: "#ffffff"
@@ -361,7 +576,17 @@ export default class escapejail extends Phaser.Scene {
     }
 
     refreshHud() {
-        this.hudText.setText(`dots: ${this.pelletsCollected}/${this.pelletsNeeded}   avoid the police`);
+        this.hudText.setText(`dots: ${this.pelletsCollected}/${this.pelletsNeeded}`);
+    }
+
+    clampActorToTop(actor) {
+        const minY = this.playfieldTopBound + actor.displayHeight * actor.originY;
+        if (actor.y >= minY) return;
+
+        actor.y = minY;
+        if (actor.body.velocity.y < 0) {
+            actor.body.setVelocityY(0);
+        }
     }
 
     update(time, delta) {
@@ -385,6 +610,8 @@ export default class escapejail extends Phaser.Scene {
         }
 
         this.updatePoliceChase(delta);
+        this.clampActorToTop(this.farmer);
+        this.clampActorToTop(this.police);
 
         // Smooth the X velocity over ~5 frames before flipping to prevent rapid oscillation.
         this.policeSmoothedVX = this.policeSmoothedVX * 0.8 + this.police.body.velocity.x * 0.2;
@@ -408,10 +635,11 @@ export default class escapejail extends Phaser.Scene {
 
         if (playerWon) {
             this.sound.play('youwin');
-            this.game.globalState.criminality = Math.max(0, this.game.globalState.criminality - 1);
+            this.gane.globalState.criminality == 100;
+            //outlaw
         } else {
             this.sound.play('youlost');
-            this.game.globalState.criminality += 1;
+            this.game.globalState.criminality == 100;
         }
         this.scene.get("hud").updateStats();
 
@@ -425,6 +653,8 @@ export default class escapejail extends Phaser.Scene {
                 () => this.scene.restart({ nextScene: this.nextScene }),
                 () => this.scene.start(this.nextScene)
             ],
+            startY: 240,
+            gap: 36,
             fontColor: "#ffffff",
             highlightColor: "#ffb000"
         });

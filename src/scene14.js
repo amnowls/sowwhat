@@ -56,6 +56,7 @@ export default class scene14 extends Phaser.Scene {
                                     this.scene.start("scene15");
                                 },
                                 () => {
+                                    this.game.globalState.fines *= 1.5;
                                     this.game.globalState.criminality += 2;
                                     this.game.globalState.neighborScore += 1;
 
@@ -69,21 +70,25 @@ export default class scene14 extends Phaser.Scene {
                         });
                     });
             } else if (this.game.globalState.certified == false) {
-                createTypewriterText(this, "\n\"looks like you've been illegally planting seeds. pay $50 bail to continue\"",
+                this.game.globalState.fines = 50;
+                this.scene.get('hud').updateStats();
+                createTypewriterText(this, "\n\"looks like you've been illegally planting seeds. pay $50 fines to continue\"",
                     -20, { fontSize: "20px", fill: "#000000" }, 6, () => {
                         createMenu(this, {
                             title: [""],
                             options: [
-                                "[ pay bail -$50 ]",
+                                "[ pay fines -$50 ]",
                                 "[ run away ]"
                             ],
                             callbacks: [
                                 () => {
                                     this.game.globalState.money -= 50;
+                                    this.game.globalState.fines = 0;
                                     this.scene.get('hud').updateStats();
                                     this.scene.start("scene15");
                                 },
                                 () => {
+                                    this.game.globalState.fines *= 1.5;
                                     this.game.globalState.criminality += 2;
                                     this.scene.get('hud').updateStats();
                                     this.scene.start("runjump", { nextScene: "scene15", sourceScene: "scene14" });

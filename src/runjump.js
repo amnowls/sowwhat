@@ -47,7 +47,7 @@ export default class runjump extends Phaser.Scene {
         frameGraphics.lineStyle(4, 0xffffff, 1); // 4px white border
         frameGraphics.strokeRect(this.frameX, this.frameY, this.frameWidth, this.frameHeight);
 
-        centerText(this, "ESCAPE THE INSPECTOR!", -170, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
+        centerText(this, "ESCAPE THE INSPECTOR!", -200, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
 
 
         this.jumpKeyPressTime = 0;
@@ -292,9 +292,45 @@ export default class runjump extends Phaser.Scene {
         this.obstacles.clear(true, true);
         centerText(this, message, 0, { fill: textColor, fontSize: "20px", align: "center" });
 
+
+    }
+
+    gameOver() {
+        console.log("Caught by the seed inspector!");
+        this.sound.play('youlost');
+        this.endGame("you've been caught!\nfines INCREASED", "#ed3833");
+
         createMenu(this, {
             title: [""],
-            options: ["[ continue ]"],
+            options: ["[ pay $" + this.game.globalState.fines + " to return to farm ]"],
+            callbacks: [
+                () => {
+                    const backgroundMusic = this.sound.get('backgroundMusic');
+                    if (backgroundMusic) {
+                        backgroundMusic.resume();
+                    }
+                    this.game.globalState.money -= this.game.globalState.fines;
+                    this.game.globalState.fines = 0;  
+                    this.scene.get('hud').updateStats();
+                    this.scene.start(this.nextScene, { sourceScene: this.sourceScene });
+                }
+            ],
+            startY: 240,
+            gap: 36,
+            fontColor: "#ffffff",
+            highlightColor: "#1645f5"
+        });
+    }
+
+    winGame() {
+        console.log("You escaped!");
+        this.sound.play('youwin');
+        this.endGame("you've escaped!", "#33ff00");
+        this.game.globalState.criminality += 1;
+        this.getScene('hud').updateStats();
+        createMenu(this, {
+            title: [""],
+            options: ["[ return to farm ]"],
             callbacks: [
                 () => {
                     const backgroundMusic = this.sound.get('backgroundMusic');
@@ -309,17 +345,5 @@ export default class runjump extends Phaser.Scene {
             fontColor: "#ffffff",
             highlightColor: "#1645f5"
         });
-    }
-
-    gameOver() {
-        console.log("Caught by the seed inspector!");
-        this.sound.play('youlost');
-        this.endGame("you've been caught!", "#ed3833");
-    }
-
-    winGame() {
-        console.log("You escaped!");
-        this.sound.play('youwin');
-        this.endGame("you've escaped!", "#33ff00");
     }
 }

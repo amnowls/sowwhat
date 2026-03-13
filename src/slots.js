@@ -61,7 +61,7 @@ export default class slots extends Phaser.Scene {
 
         const symbols = ['1', '2', '3', '4', '5', '6'];
 
-        this.titleText = centerText(this, "SPIN TO WIN\nNEIGHBOUR'S SEEDS!", -170, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
+        this.titleText = centerText(this, "SPIN TO WIN\nNEIGHBOUR'S SEEDS!", -200, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
         this.titleTween = this.tweens.add({
             targets: this.titleText,
             x: this.titleText.x + 14,

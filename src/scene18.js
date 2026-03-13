@@ -130,7 +130,7 @@ export default class scene18 extends Phaser.Scene {
                 }
             );
         } else if (this.game.globalState.pesticides == false && this.game.globalState.certified == false) {
-            const messageText = "PESTICIDE LEAKAGE FROM NEIGHBORING FARM HAS DESTROYED YOUR SOIL";
+            const messageText = "PESTICIDE LEAKAGE FROM NEIGHBORING FARM HAS DESTROYED YOUR SOIL AND CROPS";
             createTypewriterText(this, messageText, -30, { fontSize: "24px", fill: "#1645f5" }, 6,
                 () => {
                     createMenu(this, {

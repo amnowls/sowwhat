@@ -70,7 +70,7 @@ export default class planttiming extends Phaser.Scene {
             this.markerDirection = 1;
             this.markerSpeed = this.barWidth * 1.05;
 
-            centerText(this, "SEED PLANTING", -170, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px", align: "center" });
+            centerText(this, "SEED PLANTING", -200, { fill: "#ffffff", fontFamily: "PressStart2P", fontSize: "30px" });
             centerText(this, "press [ SPACE ] when marker is in GREEN zone", -105, { fill: "#ffffff", fontSize: "14px", align: "center" });
 
             this.graphics = this.add.graphics();
