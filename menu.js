@@ -1,6 +1,7 @@
 // menu.js
 // this is for keyboard toggles/input
 import { centerText } from "./ui.js";
+import { COLORS } from "./constants.js";
 
 export function createMenu(scene, {
     title,
@@ -10,8 +11,8 @@ export function createMenu(scene, {
     fontSize = '18px',
     gap = 30,
     startX = 50,
-    fontColor = "#ffffff",
-    highlightColor = "#1645f5"
+    fontColor = COLORS.WHITE,
+    highlightColor = COLORS.PRIMARY_BLUE
 }) {
 
     // --- Draw Title ---

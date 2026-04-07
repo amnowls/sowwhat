@@ -1,6 +1,7 @@
 import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { COLORS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class scene10 extends Phaser.Scene {
@@ -17,13 +18,13 @@ export default class scene10 extends Phaser.Scene {
     }
 
     create() {
-        this.cameras.main.setBackgroundColor("#1645f5");
+        this.cameras.main.setBackgroundColor(COLORS.PRIMARY_BLUE);
         escapeReset(this);
-        centerText(this, "waiting for crops to grow...", -140, { fill: "#000000" });
+        centerText(this, "waiting for crops to grow...", -140, { fill: COLORS.BLACK });
         const weather = Math.random() < 0.5 ? "MODERATE RAINSTORMS" : "MILD DROUGHT CONDITIONS";
         createTypewriterText(
             this,
-            `\n\nlocal weather forecast: ${weather}. take precautions and stay safe out there folks!`, +70, { fill: "#ffb000" }, 6);
+            `\n\nlocal weather forecast: ${weather}. take precautions and stay safe out there folks!`, 70, { fill: COLORS.ACCENT_ORANGE }, TYPEWRITER_SPEED.FAST);
         this.anims.create({
             key: 'clock_anim',
             frames: this.anims.generateFrameNumbers('clock', { start: 1, end: 11 }),
@@ -42,8 +43,8 @@ export default class scene10 extends Phaser.Scene {
                     "[ continue to harvest ]"],
                 callbacks: [
                     () => this.scene.start("scene11")],
-                fontColor: "#ffffff", // normal option color (white)
-                highlightColor: "#ffb000" // highlighted option color (orange)
+                fontColor: COLORS.WHITE, // normal option color (white)
+                highlightColor: COLORS.ACCENT_ORANGE // highlighted option color (orange)
             }
             );
         });

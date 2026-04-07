@@ -1,6 +1,7 @@
 import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { COLORS, OFFSETS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class scene14 extends Phaser.Scene {
@@ -10,12 +11,12 @@ export default class scene14 extends Phaser.Scene {
 
     create() {
         escapeReset(this);
-        this.cameras.main.setBackgroundColor("#1645f5");
+        this.cameras.main.setBackgroundColor(COLORS.PRIMARY_BLUE);
 
-        createTypewriterText(this, "SEED INSPECTOR INCOMING...", -60, { fontSize: "32px", fill: "#000000" }, 80, () => {
+        createTypewriterText(this, "SEED INSPECTOR INCOMING...", -60, { fontSize: "32px", fill: COLORS.BLACK }, TYPEWRITER_SPEED.DEFAULT, () => {
             if (this.game.globalState.certified == true && this.game.globalState.fines == 0) {
                 createTypewriterText(this, "\n\"looks like you have been abiding by the seed laws!\"",
-                    -20, { fontSize: "20px", fill: "#000000" }, 6, () => {
+                    OFFSETS.TYPEWRITER_BODY_Y, { fontSize: "20px", fill: COLORS.BLACK }, TYPEWRITER_SPEED.FAST, () => {
                         createMenu(this, {
                             title: [""],
                             options: [
@@ -26,13 +27,13 @@ export default class scene14 extends Phaser.Scene {
                                     this.scene.start("scene15");
                                 }
                             ],
-                            fontColor: "#ffffff", // normal option color (white)
-                            highlightColor: "#ffb000" // highlighted option color (orange)            
+                            fontColor: COLORS.WHITE, // normal option color (white)
+                            highlightColor: COLORS.ACCENT_ORANGE // highlighted option color (orange)            
                         });
                     });
             } else if (this.game.globalState.certified == true && this.game.globalState.fines > 0) {
                 createTypewriterText(this, "\n\"looks like you've breached your seed contract. you owe $" + this.game.globalState.fines + " in fines. HOWEVER, we can offer an incentive and waive your fines if you report any farmers who are illegally farming uncertified seeds.\"",
-                    -20, { fontSize: "20px", fill: "#000000" }, 6, () => {
+                    OFFSETS.TYPEWRITER_BODY_Y, { fontSize: "20px", fill: COLORS.BLACK }, TYPEWRITER_SPEED.FAST, () => {
                         createMenu(this, {
                             title: [""],
                             options: [
@@ -65,15 +66,15 @@ export default class scene14 extends Phaser.Scene {
                                 }
 
                             ],
-                            fontColor: "#ffffff", // normal option color (white)
-                            highlightColor: "#ffb000" // highlighted option color (orange)                
+                            fontColor: COLORS.WHITE, // normal option color (white)
+                            highlightColor: COLORS.ACCENT_ORANGE // highlighted option color (orange)                
                         });
                     });
             } else if (this.game.globalState.certified == false) {
                 this.game.globalState.fines = 50;
                 this.scene.get('hud').updateStats();
                 createTypewriterText(this, "\n\"looks like you've been illegally planting seeds. pay $50 fines to continue\"",
-                    -20, { fontSize: "20px", fill: "#000000" }, 6, () => {
+                    OFFSETS.TYPEWRITER_BODY_Y, { fontSize: "20px", fill: COLORS.BLACK }, TYPEWRITER_SPEED.FAST, () => {
                         createMenu(this, {
                             title: [""],
                             options: [
@@ -94,8 +95,8 @@ export default class scene14 extends Phaser.Scene {
                                     this.scene.start("runjump", { nextScene: "scene15", sourceScene: "scene14" });
                                 }
                             ],
-                            fontColor: "#ffffff", // normal option color (white)
-                            highlightColor: "#ffb000" // highlighted option color (orange)                
+                            fontColor: COLORS.WHITE, // normal option color (white)
+                            highlightColor: COLORS.ACCENT_ORANGE // highlighted option color (orange)                
                         });
                     });
             }

@@ -1,6 +1,7 @@
-import { centerText } from "../ui.js";
+import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { COLORS, OFFSETS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class scene15 extends Phaser.Scene {
@@ -18,14 +19,14 @@ export default class scene15 extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor("#ed3833");
         escapeReset(this);
-        centerText(this, "local forecast:", -190, {fill: "#000000"});
-        this.waitingText = centerText(this, "\n\nwaiting for crops to grow...", +70, { fill: "#000000" });
+        this.uppertext = centerText(this, "local forecast:", -190, { fill: COLORS.BLACK });
+        this.waitingText = centerText(this, "\n\nwaiting for crops to grow...", 70, { fill: COLORS.BLACK });
         const weather = Math.random() < 0.5 ? "SEVERE HEATWAVE" : "FLASH FLOODING!";
         const forecastText = centerText(
             this,
             `${weather}`,
             -150,
-            { fill: "#000000", fontSize: "32px" }
+            { fill: COLORS.BLACK, fontSize: "32px" }
         );
 
 
@@ -48,14 +49,41 @@ export default class scene15 extends Phaser.Scene {
 
         sprite.on('animationcomplete', () => {
             this.waitingText.destroy();
+            sprite.destroy();
+            forecastText.destroy();
+            this.uppertext.destroy();
+            
+            this.cameras.main.setBackgroundColor(COLORS.ACCENT_ORANGE);
+
+            centerText(this, "POOR HARVEST", OFFSETS.SEASON_TITLE_Y, { fontSize: "32px" });
+
+            let titleMessage;
+            if (this.game.globalState.soilhealthIndex <= 2) {
+                titleMessage = "\n\nyour yield is low this season due to weather conditions and your " + this.game.globalState.soilhealth + " soil health.";
+            } else if (this.game.globalState.planting <= 2) {
+                titleMessage = "\n\nyour yield is low this season due to weather conditions and poor planting.";
+            }
+            else if (this.game.globalState.pesticides == false) {
+                titleMessage = "\n\nyour yield is low this season due to weather conditions and pest damage.";
+            } else {
+                titleMessage = "\n\nyour yield is low this season due to weather conditions.";
+            };
+            this.title = createTypewriterText(this, titleMessage, 0, {}, TYPEWRITER_SPEED.FAST);
+            this.tweens.add({
+                targets: this.title,
+
+                duration: 600,
+                yoyo: true,
+                repeat: 3
+            });
             createMenu(this, {
                 title: "",
                 options: [
                     "[ continue to harvest ]"],
                 callbacks: [
                     () => this.scene.start("scene16")],
-                fontColor: "#ffffff", // normal option color (white)
-                highlightColor: "#1645f5" // highlighted option color (orange)
+                fontColor: COLORS.WHITE, // normal option color (white)
+                highlightColor: COLORS.PRIMARY_BLUE // highlighted option color (orange)
             }
             );
         });

@@ -1,6 +1,7 @@
 import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { OFFSETS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class scene16 extends Phaser.Scene {
@@ -11,20 +12,20 @@ export default class scene16 extends Phaser.Scene {
 
     create() {
         escapeReset(this);
-        centerText(this, "POOR HARVEST", -120, { fontSize: "32px" });
+        centerText(this, "POOR HARVEST", OFFSETS.SEASON_TITLE_Y, { fontSize: "32px" });
 
         let titleMessage;
         if (this.game.globalState.soilhealthIndex <= 2) {
-            titleMessage = "\n\nyour yield is poor this season due to weather conditions and your " + this.game.globalState.soilhealth + " soil health.";
+            titleMessage = "\n\nyour yield is low this season due to weather conditions and your " + this.game.globalState.soilhealth + " soil health.";
         } else if (this.game.globalState.planting <= 2) {
-            titleMessage = "\n\nyour yield is poor this season due to weather conditions and poor planting.";
+            titleMessage = "\n\nyour yield is low this season due to weather conditions and poor planting.";
         }
         else if (this.game.globalState.pesticides == false) {
-            titleMessage = "\n\nyour yield is poor this season due to weather conditions and pest damage.";
+            titleMessage = "\n\nyour yield is low this season due to weather conditions and pest damage.";
         } else {
-            titleMessage = "\n\nyour yield is poor this season due to weather conditions.";
+            titleMessage = "\n\nyour yield is low this season due to weather conditions.";
         };
-        this.title = createTypewriterText(this, titleMessage, 0, {}, 6);
+        this.title = createTypewriterText(this, titleMessage, 0, {}, TYPEWRITER_SPEED.FAST);
         this.tweens.add({
             targets: this.title,
 
@@ -32,7 +33,7 @@ export default class scene16 extends Phaser.Scene {
             yoyo: true,
             repeat: 3
         });
-        
+
         createMenu(this, {
 
             options: [

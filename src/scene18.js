@@ -1,6 +1,7 @@
 import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { COLORS, OFFSETS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class scene18 extends Phaser.Scene {
@@ -22,12 +23,12 @@ export default class scene18 extends Phaser.Scene {
         this.game.globalState.season = 4;
         this.scene.get('hud').updateStats();
 
-        centerText(this, "SEASON 4", -120, { fontSize: "40px" });
+        centerText(this, "SEASON 4", OFFSETS.SEASON_TITLE_Y, { fontSize: "40px" });
         if (this.game.globalState.criminality >= 4) {
 
             if (this.game.globalState.certified == false) {
-                createTypewriterText(this, "POLICE OFFICER INCOMING...", -30, { fontSize: "24px", fill: "#1645f5" }, 80, () => {
-                    createTypewriterText(this, "\n\nyou are under arrest for illegally farming uncertified seeds and failing to pay fines.", 0, { fontSize: "24px", fill: "#1645f5" }, 6, () => {
+                createTypewriterText(this, "POLICE OFFICER INCOMING...", OFFSETS.TYPEWRITER_NOTICE_Y, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.DEFAULT, () => {
+                    createTypewriterText(this, "\n\nyou are under arrest for illegally farming uncertified seeds and failing to pay fines.", 0, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.FAST, () => {
                         createMenu(this, {
                             title: [""],
                             options: [
@@ -44,14 +45,14 @@ export default class scene18 extends Phaser.Scene {
                                     this.scene.start("scene19");
                                 }
                             ],
-                            fontColor: "#ffffff", // normal option color (white)
-                            highlightColor: "#1645f5" // highlighted option color (orange)            
+                            fontColor: COLORS.WHITE, // normal option color (white)
+                            highlightColor: COLORS.PRIMARY_BLUE // highlighted option color (orange)            
                         });
                     });
                 });
             } else {
-                createTypewriterText(this, "POLICE OFFICER INCOMING...", -30, { fontSize: "24px", fill: "#1645f5" }, 80, () => {
-                    createTypewriterText(this, "\n\nyou are under arrest for breaching your legal contract with Monsanto and failing to pay fines.", 0, { fontSize: "24px", fill: "#1645f5" }, 6, () => {
+                createTypewriterText(this, "POLICE OFFICER INCOMING...", OFFSETS.TYPEWRITER_NOTICE_Y, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.DEFAULT, () => {
+                    createTypewriterText(this, "\n\nyou are under arrest for breaching your legal contract with Monsanto and failing to pay fines.", 0, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.FAST, () => {
                         createMenu(this, {
                             title: [""],
                             options: [
@@ -68,15 +69,15 @@ export default class scene18 extends Phaser.Scene {
                                     this.scene.start("scene19");
                                 }
                             ],
-                            fontColor: "#ffffff", // normal option color (white)
-                            highlightColor: "#1645f5" // highlighted option color (orange)            
+                            fontColor: COLORS.WHITE, // normal option color (white)
+                            highlightColor: COLORS.PRIMARY_BLUE // highlighted option color (orange)            
                         });
                     });
                 });
             }
         } else if (this.game.globalState.soilhealthIndex <= 2) {
             const messageText = "POOR SOIL HEALTH HAS LEAD TO CROP FAILURE.";
-            createTypewriterText(this, messageText, -30, { fontSize: "24px", fill: "#1645f5" }, 6,
+            createTypewriterText(this, messageText, OFFSETS.TYPEWRITER_NOTICE_Y, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.FAST,
                 () => {
                     createMenu(this, {
                         title: "\n\nyou don't have enough seeds to make a profit this season. would you like to buy extra seeds or plant the few seeds you have left?",
@@ -96,14 +97,14 @@ export default class scene18 extends Phaser.Scene {
                                 this.scene.start("scene19");
                             }
                         ],
-                        fontColor: "#ffffff", // normal option color (white)
-                        highlightColor: "#1645f5" // highlighted option color (orange)    
+                        fontColor: COLORS.WHITE, // normal option color (white)
+                        highlightColor: COLORS.PRIMARY_BLUE // highlighted option color (orange)    
                     },)
                 }
             );
         } else if (this.game.globalState.pesticides == false && this.game.globalState.certified == true) {
             const messageText = "PEST INFESTATION HAS DESTROYED YOUR CROPS.";
-            createTypewriterText(this, messageText, -30, { fontSize: "24px", fill: "#1645f5" }, 6,
+            createTypewriterText(this, messageText, OFFSETS.TYPEWRITER_NOTICE_Y, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.FAST,
                 () => {
                     createMenu(this, {
                         title: "\n\nyou don't have enough seeds to make a profit this season. would you like to buy extra seeds or plant the few seeds you have left?",
@@ -124,14 +125,14 @@ export default class scene18 extends Phaser.Scene {
                                 this.scene.start("scene19");
                             }
                         ],
-                        fontColor: "#ffffff", // normal option color (white)
-                        highlightColor: "#1645f5" // highlighted option color (orange) 
+                        fontColor: COLORS.WHITE, // normal option color (white)
+                        highlightColor: COLORS.PRIMARY_BLUE // highlighted option color (orange) 
                     },)
                 }
             );
         } else if (this.game.globalState.pesticides == false && this.game.globalState.certified == false) {
             const messageText = "PESTICIDE LEAKAGE FROM NEIGHBORING FARM HAS DESTROYED YOUR SOIL AND CROPS";
-            createTypewriterText(this, messageText, -30, { fontSize: "24px", fill: "#1645f5" }, 6,
+            createTypewriterText(this, messageText, OFFSETS.TYPEWRITER_NOTICE_Y, { fontSize: "24px", fill: COLORS.PRIMARY_BLUE }, TYPEWRITER_SPEED.FAST,
                 () => {
                     createMenu(this, {
                         title: "\n\nyou don't have enough seeds to make a profit this season. would you like to buy extra seeds or plant the few seeds you have left?",
@@ -151,8 +152,8 @@ export default class scene18 extends Phaser.Scene {
                                 this.scene.start("scene19");
                             }
                         ],
-                        fontColor: "#ffffff", // normal option color (white)
-                        highlightColor: "#1645f5" // highlighted option color (orange)    
+                        fontColor: COLORS.WHITE, // normal option color (white)
+                        highlightColor: COLORS.PRIMARY_BLUE // highlighted option color (orange)    
                     })
                 }
             );

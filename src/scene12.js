@@ -1,6 +1,7 @@
 import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { OFFSETS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class scene12 extends Phaser.Scene {
@@ -12,10 +13,10 @@ export default class scene12 extends Phaser.Scene {
         this.game.globalState.season = 3;
         this.scene.get('hud').updateStats();
         escapeReset(this);
-        centerText(this, "SEASON 3", -120, { fontSize: "40px" });
+        centerText(this, "SEASON 3", OFFSETS.SEASON_TITLE_Y, { fontSize: "40px" });
         if (this.game.globalState.certified == true) {
             const messageText = "your neighbors are struggling to make a profit with their uncertified seeds\n\nwould you like to illegally share your surplus seeds with neighbors or abide by your contract?";
-            createTypewriterText(this, messageText, 0, {}, 6,
+            createTypewriterText(this, messageText, 0, {}, TYPEWRITER_SPEED.FAST,
                 () => {
                     createMenu(this, {
                         title: "",
@@ -46,7 +47,7 @@ export default class scene12 extends Phaser.Scene {
                 });
         } else {
             const messageText = "you hear rumours that there will be inspections to check for seed certification. you are worried you will be caught using uncertified seeds.\n\nwould you like to ask your neighbours to share their certified seeds with you or continue using your uncertified seeds?";
-            createTypewriterText(this, messageText, 0, {}, 6,
+            createTypewriterText(this, messageText, 0, {}, TYPEWRITER_SPEED.FAST,
                 () => {
                     createMenu(this, {
                         title: "",

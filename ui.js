@@ -1,3 +1,5 @@
+import { COLORS, OFFSETS, TYPEWRITER_SPEED } from "./constants.js";
+
 export function centerText(scene, msg, yOffset = 0, style = {}) {
     const { width, height } = scene.scale;
 
@@ -8,7 +10,7 @@ export function centerText(scene, msg, yOffset = 0, style = {}) {
         {
             fontSize: style.fontSize || '18px',
             fontFamily: style.fontFamily || 'PressStart2P',
-            fill: style.fill || '#1645f5',
+            fill: style.fill || COLORS.PRIMARY_BLUE,
             align: style.align || 'left',
             wordWrap: style.wordWrap || { width: width * .7, useAdvancedWrap: true},
             lineSpacing: style.lineSpacing || 10
@@ -19,16 +21,16 @@ export function centerText(scene, msg, yOffset = 0, style = {}) {
 
 
 
-export function createTypewriterText(scene, fullText, yOffset = 0, style = {}, speed = 80, onComplete) {
+export function createTypewriterText(scene, fullText, yOffset = 0, style = {}, speed = TYPEWRITER_SPEED.DEFAULT, onComplete) {
     const { width, height } = scene.scale;
     const textObject = scene.add.text(
-        width * .15,
+        width * OFFSETS.TYPEWRITER_X_RATIO,
         height / 2 +yOffset,
         '',
         {
             fontSize: style.fontSize || '18px',
             fontFamily: style.fontFamily || 'PressStart2P',
-            fill: style.fill || '#1645f5',
+            fill: style.fill || COLORS.PRIMARY_BLUE,
             align: style.align || 'left',
             wordWrap: style.wordWrap || { width: width * .7, useAdvancedWrap: true},
             lineSpacing: style.lineSpacing || 10

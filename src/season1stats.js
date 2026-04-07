@@ -1,6 +1,7 @@
 import { centerText, createTypewriterText } from "../ui.js";
 import { createMenu } from "../menu.js";
 import { escapeReset } from "../escreset.js";
+import { COLORS, TYPEWRITER_SPEED } from "../constants.js";
 
 
 export default class season1stats extends Phaser.Scene {
@@ -10,7 +11,7 @@ export default class season1stats extends Phaser.Scene {
     create() {
         escapeReset(this);
 
-        this.cameras.main.setBackgroundColor("#1645f5");
+        this.cameras.main.setBackgroundColor(COLORS.PRIMARY_BLUE);
         // if (this.game.globalState.pesticides == true && this.game.globalState.certified == false) {
         //     this.game.globalState.yield = this.game.globalState.planting * 3 - this.game.globalState.soilhealth * 3;
         // } else if (this.game.globalState.pesticides == true || this.game.globalState.certified == true) {
@@ -24,14 +25,14 @@ export default class season1stats extends Phaser.Scene {
 
         // this.game.globalState.profit = this.game.globalState.yield * 2 - (this.game.globalState.criminality * 5 + this.game.globalState.fines * 10);
 
-        centerText(this, "SEASON 1 STATS.", -80, { fill: "#ffb000", fontSize: "30px", fontFamily: 'PressStart2P', align: "center" },
+        centerText(this, "SEASON 1 STATS.", -80, { fill: COLORS.ACCENT_ORANGE, fontSize: "30px", fontFamily: 'PressStart2P', align: "center" },
         );
         createTypewriterText(
             this,
             "\n\nYIELD: " + this.game.globalState.yield + "\nprofit:\nneighbor score: " + this.game.globalState.neighborScore,
             0,
-            { fill: "#ffb000" },
-            6,
+            { fill: COLORS.ACCENT_ORANGE },
+            TYPEWRITER_SPEED.FAST,
             () => {
                 createMenu(this, {
                     title: [""],
@@ -43,8 +44,8 @@ export default class season1stats extends Phaser.Scene {
                             this.scene.start("seedlaw");
                         }
                     ],
-                    fontColor: "#ffffff", // normal option color (white)
-                    highlightColor: "#ffb000" // highlighted option color (orange)
+                    fontColor: COLORS.WHITE, // normal option color (white)
+                    highlightColor: COLORS.ACCENT_ORANGE // highlighted option color (orange)
                 });
             }
         );
